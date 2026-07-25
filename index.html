@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngọc Rồng Hoa Mai - Huyền Thoại Trở Lại</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- MÀN HÌNH CHỜ (SPLASH SCREEN) - HIỂN THỊ 5 GIÂY VÀ HIỆU ỨNG HOA MAI RƠI -->
+  <div id="splashScreen">
+    <div class="apricot-falling-container" id="apricotContainer"></div>
+    <div class="splash-content">
+      <div class="splash-logo">
+        <h1>🐉 NGỌC RỒNG HOA MAI</h1>
+        <p>Hành Trình Huyền Thoại</p>
+      </div>
+      <div class="loader-box">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+      <div class="loader-text" id="loaderText">Đang tải dữ liệu... (0%)</div>
+    </div>
+  </div>
+
+  <!-- HIỆU ỨNG HOA MAI RƠI XUYÊN SUỐT TRANG CHÍNH -->
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    
+    <!-- HEADER ĐƯỢC TẢI TỰ ĐỘNG TỪ header.html -->
+    <div id="header-placeholder"></div>
+
+    <!-- HERO / MAIN CONTENT -->
+    <div id="mainContent" class="main-content">
+      <div class="hero-banner">
+        <h2>🌸 CHÀO MỪNG ĐẾN VỚI NRO HOA MAI 🌸</h2>
+        <p>Tham gia ngay thế giới Ngọc Rồng trực tuyến đông vui nhất, nhiều sự kiện hấp dẫn và quà tặng tân thủ cực khủng!</p>
+        <div class="hero-actions">
+          <a href="#downloadSection" class="btn-glow btn-download-large"><i class="fa-solid fa-gift"></i> Sự kiện</a>
+          <a href="#zaloSection" class="btn-glow btn-zalo-large"><i class="fa-solid fa-comments"></i> Diễn Đàn</a>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" id="downloadSection">
+          <h3><i class="fa-solid fa-download"></i> Tải Game Đa Nền Tảng</h3>
+          <p>Hỗ trợ đầy đủ các hệ điều hành mượt mà, không giật lag.</p>
+          <div class="download-buttons">
+            <a href="https://drive.google.com/file/d/1ODFutee_5d7anmvLXMOCf4dJBous7HXp/view?usp=sharing" target="_blank" class="btn-store" style="text-decoration:none; display:block;"><i class="fa-brands fa-android"></i> Android / APK</a>
+            <a href="https://drive.google.com/file/d/1Oy-rBFOUYgVfE4NtWFGBt_dAvNK3j2md/view?usp=sharing" target="_blank" class="btn-store" style="text-decoration:none; display:block;"><i class="fa-solid fa-desktop"></i> PC / Windows</a>
+          </div>
+        </div>
+
+        <div class="feature-card" id="zaloSection">
+          <h3><i class="fa-solid fa-comments"></i> Cộng Đồng Zalo</h3>
+          <p>Giao lưu, kết bạn, mua bán và cập nhật thông tin sự kiện nhanh nhất từ BQT.</p>
+          <a href="https://zalo.me/g/ybgabw007" target="_blank" class="btn-primary" style="display:inline-block; margin-top:15px; text-decoration:none;"><i class="fa-solid fa-paper-plane"></i> Vào Box Zalo Chính Thức</a>
+        </div>
+
+        <div class="feature-card" id="rechargeSection">
+          <h3><i class="fa-solid fa-wallet"></i> Nạp Thẻ Cào / Momo</h3>
+          <p>Hệ thống nạp thẻ tự động chiết khấu cao, nhận ngay hồng ngọc và ưu đãi nạp đầu.</p>
+          <button class="btn-secondary" onclick="openRechargeModal()"><i class="fa-solid fa-coins"></i> Nạp Thẻ Ngay</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="profilePageModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('profilePageModal')">&times;</span>
+        <h2>👤 Thông Tin Tài Khoản</h2>
+        <div class="profile-info">
+          <p><strong>Tên đăng nhập:</strong> <span id="profileUsername"></span></p>
+          <p><strong>ID Nhân Vật:</strong> <span id="profileId"></span></p>
+          <p><strong>Ngày tạo:</strong> <span id="profileCreated"></span></p>
+        </div>
+        <button id="logoutBtn2" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</button>
+      </div>
+    </div>
+
+    <!-- CHANGE PASSWORD MODAL -->
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
+        <h2>🔒 Đổi Mật Khẩu</h2>
+        <form id="changePasswordForm">
+          <input type="password" id="oldPassword" placeholder="Mật khẩu cũ" required>
+          <input type="password" id="newPassword" placeholder="Mật khẩu mới (6+ ký tự)" required>
+          <button type="submit" class="btn-primary">Cập Nhật Mật Khẩu</button>
+        </form>
+        <div id="changePasswordMessage" class="message"></div>
+      </div>
+    </div>
+
+    <!-- RECHARGE MODAL -->
+    <div id="rechargeModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('rechargeModal')">&times;</span>
+        <h2>💳 Nạp Thẻ Cào Siêu Tốc</h2>
+        <form id="rechargeForm">
+          <select id="cardType" class="select-custom">
+            <option value="VIETTEL">Viettel</option>
+            <option value="VINAPHONE">Vinaphone</option>
+            <option value="MOBIFONE">Mobifone</option>
+          </select>
+          <select id="cardAmount" class="select-custom">
+            <option value="10000">10.000 VNĐ</option>
+            <option value="50000">50.000 VNĐ</option>
+            <option value="100000">100.000 VNĐ</option>
+            <option value="500000">500.000 VNĐ</option>
+          </select>
+          <input type="text" id="cardSerial" placeholder="Số Seri thẻ" required>
+          <input type="text" id="cardCode" placeholder="Mã thẻ cào" required>
+          <button type="submit" class="btn-primary">Nạp Thẻ Ngay</button>
+        </form>
+        <div id="rechargeMessage" class="message"></div>
+      </div>
+    </div>
+  </div>
+
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const splashScreen = document.getElementById("splashScreen");
+    
+    // Kiểm tra xem đã xem màn hình chờ trong phiên này chưa
+    if (sessionStorage.getItem("hasLoadedSplash")) {
+      // Nếu đã xem rồi thì ẩn ngay lập tức, không chạy lại hiệu ứng nữa
+      if (splashScreen) {
+        splashScreen.style.display = "none";
+      }
+    } else {
+      // Nếu là vào trang lần đầu tiên thì chạy hiệu ứng 5 giây
+      sessionStorage.setItem("hasLoadedSplash", "true");
+      
+      let progress = 0;
+      const loaderBar = document.getElementById("loaderBar");
+      const loaderText = document.getElementById("loaderText");
+
+      const interval = setInterval(() => {
+        progress += 2;
+        if (loaderBar) loaderBar.style.width = progress + "%";
+        if (loaderText) loaderText.innerText = `Đang tải dữ liệu... (${progress}%)`;
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          if (splashScreen) {
+            splashScreen.style.opacity = "0";
+            setTimeout(() => {
+              splashScreen.style.display = "none";
+            }, 800);
+          }
+        }
+      }, 20);
+    }
+
+    createApricotFlowers("apricotContainer");
+    createApricotFlowers("mainApricotContainer");
+  });
+
+  function createApricotFlowers(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const flowerCount = 25;
+    for (let i = 0; i < flowerCount; i++) {
+      const flower = document.createElement("div");
+      flower.classList.add("apricot-flower");
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.animationDuration = (Math.random() * 3 + 4) + "s"; 
+      flower.style.animationDelay = (Math.random() * 5) + "s";
+      flower.style.transform = `scale(${Math.random() * 0.6 + 0.6})`;
+      container.appendChild(flower);
+    }
+  }
+
+  function openModal(modalId) {
+    document.getElementById(modalId).style.display = "flex";
+  }
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+  }
+  function openRechargeModal() {
+    openModal('rechargeModal');
+  }
+</script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/security.js"></script>
+</body>
+</html>

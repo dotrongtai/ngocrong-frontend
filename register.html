@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+  <div class="modal-content" style="display: block; max-width: 400px; width: 100%;">
+    <a href="index.html" class="close" style="text-decoration: none;">&times;</a>
+    <h2>📝 Đăng Ký Tài Khoản</h2>
+    <form id="registerForm">
+      <input type="text" id="registerUsername" placeholder="Tên đăng nhập (3-20 ký tự)" required>
+      <input type="password" id="registerPassword" placeholder="Mật khẩu (6+ ký tự)" required>
+      <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu" required>
+      <button type="submit" class="btn-primary" style="width: 100%;">Đăng Ký</button>
+      <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+      <p><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></p>
+    </form>
+    <div id="registerMessage" class="message"></div>
+  </div>
+<script src="js/security.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

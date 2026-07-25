@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông Tin Tài Khoản - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+
+  <div id="header-placeholder" style="width: 100%; position: absolute; top: 0;"></div>
+
+  <div class="modal-content" style="display: block; max-width: 450px; width: 90%; margin-top: 60px;">
+    <h2>👤 Thông Tin Tài Khoản</h2>
+    <div class="profile-info" style="margin: 20px 0; line-height: 1.8;">
+      <p><strong>Tên đăng nhập:</strong> <span id="profileUsername">Đang tải...</span></p>
+      <p><strong>ID Nhân Vật:</strong> <span id="profileId">Đang tải...</span></p>
+      <p><strong>Ngày tạo tài khoản:</strong> <span id="profileCreated">Đang tải...</span></p>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <button class="btn-primary" onclick="openModal('changePasswordModal')" style="width: 100%;"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
+      <div style="display: flex; gap: 10px;">
+        <a href="index.html" class="btn-secondary" style="flex: 1; text-align: center; text-decoration: none; padding: 10px;"><i class="fa-solid fa-house"></i> Về Trang Chủ</a>
+        <button id="logoutBtn2" class="btn-logout" style="flex: 1;"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
+      <h2>🔒 Đổi Mật Khẩu</h2>
+      <form id="changePasswordForm">
+        <input type="password" id="oldPassword" placeholder="Mật khẩu cũ" required>
+        <input type="password" id="newPassword" placeholder="Mật khẩu mới (6+ ký tự)" required>
+        <button type="submit" class="btn-primary">Cập Nhật Mật Khẩu</button>
+      </form>
+      <div id="changePasswordMessage" class="message"></div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "flex";
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+  </script>
+  <script src="js/security.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

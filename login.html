@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Nhập - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+  <div class="modal-content" style="display: block; max-width: 400px; width: 100%;">
+    <a href="index.html" class="close" style="text-decoration: none;">&times;</a>
+    <h2>🔑 Đăng Nhập Tài Khoản</h2>
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Tên đăng nhập" required>
+      <input type="password" id="loginPassword" placeholder="Mật khẩu" required>
+      
+      <!-- KHUNG HIỂN THỊ VÀ NHẬP MÃ TỰ GEN -->
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+        <div id="captchaBox" style="flex: 1; background: rgba(0,0,0,0.6); border: 1px dashed #ffcc00; color: #ffcc00; font-weight: bold; font-size: 18px; text-align: center; padding: 10px; border-radius: 8px; letter-spacing: 4px; user-select: none;">
+          1234
+        </div>
+        <button type="button" id="refreshCaptcha" class="btn-secondary" style="padding: 11px 15px; margin: 0;"><i class="fa-solid fa-rotate-right"></i></button>
+      </div>
+      <input type="text" id="loginCaptcha" placeholder="Nhập mã xác nhận" required>
+
+      <button type="submit" class="btn-primary" style="width: 100%;">Đăng Nhập</button>
+      <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+      <p><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></p>
+    </form>
+    <div id="loginMessage" class="message"></div>
+  </div>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  
+</body>
+</html>
