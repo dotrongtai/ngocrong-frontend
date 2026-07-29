@@ -1,19 +1,13 @@
-// ⚙️ API Base URL - trỏ sang backend đã deploy trên Railway
-const API_BASE_URL = "https://ngocrong-backend-production.up.railway.app/api";
 
 const loginLink = document.getElementById('loginLink');
 const registerLink = document.getElementById('registerLink');
 const loginModal = document.getElementById('loginModal');
 const registerModal = document.getElementById('registerModal');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
 const logoutBtn = document.getElementById('logoutBtn');
 const logoutBtn2 = document.getElementById('logoutBtn2');
 const profileLink = document.getElementById('profileLink');
-
 const loginMessage = document.getElementById('loginMessage');
 const registerMessage = document.getElementById('registerMessage');
-
 const profilePage = document.getElementById('profilePage');
 const homePage = document.getElementById('homePage');
 
@@ -24,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const res = await fetch("header.html");
       const html = await res.text();
       headerPlaceholder.innerHTML = html;
-      
+
       initHeaderEvents();
       checkAuthStatus();
     } catch (err) {
@@ -33,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     checkAuthStatus();
   }
-  
 
   const captchaBox = document.getElementById("captchaBox");
   const refreshCaptchaBtn = document.getElementById("refreshCaptcha");
@@ -87,28 +80,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         msgDiv.className = "message";
       }
 
-      try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
+      const data = await loginUser(username, password);
 
-        if (data.success) {
-          showMessage(msgDiv, "✅ Đăng nhập thành công!", "success");
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.success) {
+        showMessage(msgDiv, "✅ Đăng nhập thành công!", "success");
+        saveLogin(data.token, data.user);
 
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1000);
-        } else {
-          showMessage(msgDiv, data.message, "error");
-          if (loginCaptchaInput) generateCaptcha();
-        }
-      } catch (err) {
-        showMessage(msgDiv, "Lỗi kết nối đến server!", "error");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      } else {
+        showMessage(msgDiv, data.message || "Đăng nhập thất bại", "error");
         if (loginCaptchaInput) generateCaptcha();
       }
     });
@@ -138,24 +120,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         msgDiv.className = "message";
       }
 
-      try {
-        const response = await fetch(`${API_BASE_URL}/auth/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password, confirmPassword })
-        });
-        const data = await response.json();
+      const data = await registerUser(username, password, confirmPassword);
 
-        if (data.success) {
-          showMessage(msgDiv, "✅ Đăng ký thành công! Đang chuyển hướng...", "success");
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 1500);
-        } else {
-          showMessage(msgDiv, data.message, "error");
-        }
-      } catch (err) {
-        showMessage(msgDiv, "Lỗi kết nối đến server!", "error");
+      if (data.success) {
+        showMessage(msgDiv, "✅ Đăng ký thành công! Đang chuyển hướng...", "success");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      } else {
+        showMessage(msgDiv, data.message || "Đăng ký thất bại", "error");
       }
     });
   }
@@ -188,20 +161,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         msgDiv.className = "message";
       }
 
-      try {
-        const result = await apiCall("/auth/change-password", "POST", { oldPassword, newPassword });
+      const result = await apiCall("/auth/change-password", "POST", { oldPassword, newPassword });
 
-        if (result.success) {
-          showMessage(msgDiv, "✅ Đổi mật khẩu thành công!", "success");
-          changePasswordForm.reset();
-          setTimeout(() => {
-            closeModal("changePasswordModal");
-          }, 1500);
-        } else {
-          showMessage(msgDiv, result.message || "Đổi mật khẩu thất bại", "error");
-        }
-      } catch (err) {
-        showMessage(msgDiv, "Lỗi kết nối đến server!", "error");
+      if (result.success) {
+        showMessage(msgDiv, "✅ Đổi mật khẩu thành công!", "success");
+        changePasswordForm.reset();
+        setTimeout(() => {
+          closeModal("changePasswordModal");
+        }, 1500);
+      } else {
+        showMessage(msgDiv, result.message || "Đổi mật khẩu thất bại", "error");
       }
     });
   }
@@ -210,12 +179,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 function initHeaderEvents() {
   const logoutBtn = document.getElementById("logoutBtn");
   const logoutBtn2 = document.getElementById("logoutBtn2");
-  
+
   const handleLogout = (e) => {
     e.preventDefault();
     if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      clearLogin();
       window.location.href = "index.html";
     }
   };
@@ -229,72 +197,74 @@ async function checkAuthStatus() {
   const guestLinks = document.getElementById("guestLinks");
   const userDropdown = document.getElementById("userDropdown");
   const rechargeNav = document.getElementById("rechargeNav");
+  const eventNav = document.getElementById("eventNav");        // MỚI
   const navUsername = document.getElementById("navUsername");
 
-  if (token) {
-    if (guestLinks) guestLinks.classList.add("hidden");
-    if (userDropdown) userDropdown.classList.remove("hidden");
-    if (rechargeNav) rechargeNav.classList.remove("hidden");
+  const show = (el) => { if (el) el.classList.remove("hidden"); };
+  const hide = (el) => { if (el) el.classList.add("hidden"); };
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      const data = await response.json();
-      
-      if (data.success) {
-        if (navUsername) navUsername.innerText = data.user.username;
-      } else {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    if (guestLinks) guestLinks.classList.remove("hidden");
-    if (userDropdown) userDropdown.classList.add("hidden");
-    if (rechargeNav) rechargeNav.classList.add("hidden");
+  if (!token) {
+    show(guestLinks);
+    hide(userDropdown);
+    hide(rechargeNav);
+    hide(eventNav);
+    return;
+  }
+
+  hide(guestLinks);
+  show(userDropdown);
+  show(rechargeNav);
+  show(eventNav);
+
+  const data = await getProfile();
+
+  if (data.success) {
+    if (navUsername) navUsername.innerText = data.user.username;
+    return;
+  }
+
+  if (data.httpStatus === 401 || data.httpStatus === 403) {
+    clearLogin();
+    show(guestLinks);
+    hide(userDropdown);
+    hide(rechargeNav);
+    hide(eventNav);
   }
 }
 
 async function loadProfileData() {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  if (!isLoggedIn()) {
     window.location.href = "login.html";
     return;
   }
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
-      method: "GET",
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    const data = await response.json();
+  const data = await getProfile();
 
-    if (data.success) {
-      document.getElementById("profileUsername").innerText = data.user.username;
-      if (data.user.create_time) {
-        document.getElementById("profileCreated").innerText = new Date(data.user.create_time).toLocaleDateString("vi-VN");
-      }
-      const tongnapEl = document.getElementById("profileTongnap");
-      const vndEl = document.getElementById("profileVnd");
-      if (tongnapEl) tongnapEl.innerText = Number(data.user.tongnap || 0).toLocaleString("vi-VN") + "đ";
-      if (vndEl) vndEl.innerText = Number(data.user.vnd || 0).toLocaleString("vi-VN") + "đ";
-    } else {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "login.html";
+  if (data.success) {
+    const usernameEl = document.getElementById("profileUsername");
+    const createdEl = document.getElementById("profileCreated");
+    if (usernameEl) usernameEl.innerText = data.user.username;
+    if (createdEl && data.user.create_time) {
+      createdEl.innerText = new Date(data.user.create_time).toLocaleDateString("vi-VN");
     }
-  } catch (err) {
-    console.error(err);
+
+    const tongnapEl = document.getElementById("profileTongnap");
+    const vndEl = document.getElementById("profileVnd");
+    if (tongnapEl) tongnapEl.innerText = Number(data.user.tongnap || 0).toLocaleString("vi-VN") + "đ";
+    if (vndEl) vndEl.innerText = Number(data.user.vnd || 0).toLocaleString("vi-VN") + "đ";
+    return;
+  }
+
+  if (data.httpStatus === 401 || data.httpStatus === 403) {
+    clearLogin();
+    window.location.href = "login.html";
+  } else {
+    console.error("Không tải được thông tin tài khoản:", data.message);
   }
 }
 
 function openRechargeModal() {
-  const token = localStorage.getItem("token");
-  if (!token) {
+  if (!isLoggedIn()) {
     alert("Vui lòng đăng nhập để nạp thẻ!");
     window.location.href = "login.html";
     return;
@@ -306,7 +276,7 @@ function showMessage(element, message, type) {
   if (!element) return;
   element.textContent = message;
   element.className = `message ${type}`;
-  
+
   setTimeout(() => {
     element.textContent = "";
     element.className = "message";

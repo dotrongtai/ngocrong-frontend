@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nạp Tích Luỹ 7 Ngày — NRO HOA MAI</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Be+Vietnam+Pro:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+.ev-body{
+  --ev-night:#100C1C; --ev-night-2:#1B1430; --ev-night-3:#231A3D;
+  --ev-edge:#33265C; --ev-orb:#F58C1F; --ev-orb-hi:#FFCE63; --ev-star:#B32218;
+  --ev-jade:#46D2A0; --ev-mist:#8073AC; --ev-paper:#F2EDFB;
+  --ev-display:"Anton",Impact,sans-serif;
+  --ev-body-font:"Be Vietnam Pro",system-ui,sans-serif;
+  --ev-mono:"JetBrains Mono",ui-monospace,monospace;
+  background:
+    radial-gradient(120% 42% at 50% 8%, #2A1D4A 0%, transparent 62%),
+    var(--ev-night);
+  color:var(--ev-paper);
+  min-height:100vh;
+}
+.ev-page{
+  max-width:560px; margin:0 auto; padding:26px 18px 60px;
+  font-family:var(--ev-body-font); font-size:15px; line-height:1.55;
+}
+.ev-page *{box-sizing:border-box}
+.ev-page p{margin:0}
+
+.ev-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ev-orb);font-weight:600}
+.ev-title{
+  font-family:var(--ev-display); font-size:clamp(36px,10.5vw,56px);
+  line-height:1.22; margin:10px 0 8px; font-weight:400;
+}
+.ev-title em{font-style:normal;color:var(--ev-orb-hi)}
+.ev-lede{color:var(--ev-mist);max-width:44ch}
+
+/* --- 7 viên ngọc --- */
+.ev-orbit{position:relative;margin:32px 0 28px;padding:14px 0}
+.ev-track{position:absolute;top:50%;left:24px;right:26px;height:2px;background:var(--ev-edge);transform:translateY(-50%);border-radius:2px}
+.ev-track-fill{height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--ev-orb),var(--ev-orb-hi));transition:width .8s cubic-bezier(.22,1,.36,1)}
+.ev-orbs{position:relative;display:flex;align-items:center;justify-content:space-between}
+.ev-orb{
+  position:relative;width:44px;height:44px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 32% 28%, #4B3C74, #241B42 70%);
+  box-shadow:inset 0 0 0 1px #4A3A7C;
+  opacity:0;transform:scale(.7);transition:opacity .45s ease,transform .45s ease;
+}
+.ev-orb.is-in{opacity:1;transform:scale(1)}
+.ev-orb[data-final]{width:56px;height:56px}
+.ev-orb[data-state="done"]{
+  background:radial-gradient(circle at 30% 24%, #FFE7B0 0%, var(--ev-orb-hi) 18%, var(--ev-orb) 52%, #B85E06 100%);
+  box-shadow:inset 0 -3px 8px rgba(120,50,0,.45), 0 0 18px rgba(245,140,31,.5);
+}
+.ev-orb[data-state="active"]{
+  background:radial-gradient(circle at 32% 28%, #6A55A0, #2B2050 70%);
+  box-shadow:inset 0 0 0 2px var(--ev-orb), 0 0 0 6px rgba(245,140,31,.14);
+  animation:evBreathe 2.6s ease-in-out infinite;
+}
+.ev-orb[data-state="ready"]{
+  background:radial-gradient(circle at 30% 24%, #FFF3D2 0%, var(--ev-orb-hi) 22%, var(--ev-orb) 56%, #B85E06 100%);
+  box-shadow:inset 0 -3px 8px rgba(120,50,0,.45), 0 0 0 4px rgba(255,206,99,.22), 0 0 26px rgba(255,206,99,.55);
+  animation:evBreathe 1.8s ease-in-out infinite;
+}
+@keyframes evBreathe{50%{box-shadow:inset 0 0 0 2px var(--ev-orb),0 0 0 12px rgba(245,140,31,.05),0 0 22px rgba(245,140,31,.35)}}
+.ev-star{
+  position:absolute;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;background:#5A4A8C;
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.ev-orb[data-final] .ev-star{width:8px;height:8px;margin:-4px 0 0 -4px}
+.ev-orb[data-state="done"] .ev-star,.ev-orb[data-state="ready"] .ev-star{background:var(--ev-star)}
+
+
+.ev-today{background:linear-gradient(160deg,var(--ev-night-3),var(--ev-night-2));border:1px solid var(--ev-edge);border-radius:18px;padding:22px}
+.ev-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ev-mist);font-weight:600}
+.ev-amount{font-family:var(--ev-display);font-size:clamp(42px,13vw,62px);line-height:1.06;margin:6px 0 2px;color:var(--ev-orb-hi);font-weight:400}
+.ev-amount span{font-family:var(--ev-body-font);font-size:16px;font-weight:600;color:var(--ev-mist);margin-left:6px}
+.ev-note{color:var(--ev-mist);margin-top:6px}
+.ev-note b{color:var(--ev-paper);font-weight:600}
+
+.ev-bar{height:7px;background:#2A1F4E;border-radius:99px;margin:16px 0 8px;overflow:hidden}
+.ev-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--ev-orb),var(--ev-orb-hi));transition:width .7s cubic-bezier(.22,1,.36,1)}
+.ev-bar-cap{display:flex;justify-content:space-between;font-family:var(--ev-mono);font-size:12px;color:var(--ev-mist)}
+
+.ev-btn{
+  display:block;width:100%;margin-top:18px;padding:14px 18px;border:0;border-radius:12px;
+  cursor:pointer;text-align:center;text-decoration:none;
+  font-family:var(--ev-body-font);font-size:15px;font-weight:800;
+  background:linear-gradient(180deg,var(--ev-orb-hi),var(--ev-orb));color:#3B1D00;
+  transition:transform .12s ease,filter .12s ease;
+}
+.ev-btn:hover{filter:brightness(1.06)}
+.ev-btn:active{transform:translateY(1px)}
+.ev-btn:disabled{background:#2A1F4E;color:var(--ev-mist);cursor:not-allowed;filter:none}
+.ev-btn-ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--ev-edge);color:var(--ev-paper);width:auto;display:inline-block;padding:11px 22px}
+
+/* --- bảng 7 mốc --- */
+.ev-ladder{margin-top:26px;border-top:1px solid var(--ev-edge)}
+.ev-row{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--ev-edge)}
+.ev-row-day{font-family:var(--ev-display);font-size:15px;width:62px;color:var(--ev-mist);font-weight:400}
+.ev-row-amount{font-family:var(--ev-mono);font-size:14px;flex:1}
+.ev-row[data-done="1"] .ev-row-day,.ev-row[data-done="1"] .ev-row-amount{color:var(--ev-paper)}
+.ev-chip{font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px}
+.ev-chip[data-k="done"]{background:rgba(70,210,160,.14);color:var(--ev-jade)}
+.ev-chip[data-k="active"]{background:rgba(245,140,31,.16);color:var(--ev-orb-hi)}
+.ev-chip[data-k="lock"]{background:#241B42;color:var(--ev-mist)}
+
+
+.ev-reward{margin-top:26px;padding:20px;border-radius:18px;background:var(--ev-night-2);border:1px dashed var(--ev-edge)}
+.ev-reward.is-ready{border-style:solid;border-color:var(--ev-orb);background:linear-gradient(160deg,#33245C,var(--ev-night-2))}
+.ev-reward-amount{font-family:var(--ev-display);font-size:34px;color:var(--ev-orb-hi);font-weight:400}
+.ev-reward-amount small{font-family:var(--ev-body-font);font-size:14px;font-weight:600;color:var(--ev-mist)}
+.ev-reward-note{color:var(--ev-mist);font-size:13px;margin-top:6px}
+
+
+.ev-panel{background:var(--ev-night-2);border:1px solid var(--ev-edge);border-radius:16px;padding:24px;text-align:center}
+.ev-panel p{color:var(--ev-mist);margin-bottom:14px}
+.ev-skeleton{height:16px;border-radius:6px;background:linear-gradient(90deg,#231A3D,#2E2352,#231A3D);background-size:200% 100%;animation:evShimmer 1.3s linear infinite}
+@keyframes evShimmer{to{background-position:-200% 0}}
+.ev-hide{display:none!important}
+.ev-foot{margin-top:22px;font-size:12px;color:var(--ev-mist);line-height:1.7}
+
+.ev-toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);
+  background:var(--ev-orb-hi);color:#3B1D00;font-weight:800;font-family:var(--ev-body-font);
+  padding:12px 20px;border-radius:99px;opacity:0;pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;z-index:9999;
+}
+.ev-toast.is-show{opacity:1;transform:translate(-50%,0)}
+
+.ev-page :focus-visible{outline:2px solid var(--ev-orb-hi);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){
+  .ev-page *,.ev-orb{animation:none!important;transition:none!important}
+  .ev-orb{opacity:1;transform:none}
+}
+</style>
+</head>
+<body class="ev-body">
+
+<div id="header-placeholder"></div>
+
+<main class="ev-page">
+
+  <p class="ev-eyebrow">Sự kiện · Nạp tích luỹ</p>
+  <h1 class="ev-title">Thu đủ <em>7 viên ngọc</em></h1>
+  <p class="ev-lede">Mỗi ngày nạp đủ mốc để thu một viên. Tiền nạp trong cùng ngày được cộng dồn. Đủ 7 viên, nhận thêm 15.000 VNĐ.</p>
+
+  <div class="ev-orbit">
+    <div class="ev-track"><div class="ev-track-fill" id="evTrackFill"></div></div>
+    <div class="ev-orbs" id="evOrbs"></div>
+  </div>
+
+
+  <div class="ev-panel" id="evLoading">
+    <div class="ev-skeleton" style="width:60%;margin:0 auto 10px"></div>
+    <div class="ev-skeleton" style="width:35%;margin:0 auto"></div>
+  </div>
+
+
+  <div class="ev-panel ev-hide" id="evError">
+    <p id="evErrorText"></p>
+    <button class="ev-btn ev-btn-ghost" id="evErrorBtn"></button>
+  </div>
+
+
+  <div id="evMain" class="ev-hide">
+
+    <section class="ev-today">
+      <p class="ev-label" id="evTodayLabel"></p>
+      <p class="ev-amount" id="evTodayAmount"></p>
+      <p class="ev-note" id="evTodayNote"></p>
+
+      <div id="evTodayBar" class="ev-hide">
+        <div class="ev-bar"><i id="evBarFill"></i></div>
+        <div class="ev-bar-cap">
+          <span id="evBarPaid"></span>
+          <span id="evBarNeed"></span>
+        </div>
+      </div>
+
+      <a class="ev-btn" id="evTopupBtn" href="topup.html">
+        <i class="fa-solid fa-wallet"></i> Nạp ngay
+      </a>
+    </section>
+
+    <section class="ev-ladder" id="evLadder"></section>
+
+    <section class="ev-reward" id="evReward">
+      <p class="ev-label">Phần thưởng hoàn thành</p>
+      <p class="ev-reward-amount" id="evRewardAmount">15.000 <small>VNĐ</small></p>
+      <p class="ev-reward-note" id="evRewardNote"></p>
+      <button class="ev-btn" id="evClaimBtn" disabled>Nhận thưởng</button>
+    </section>
+
+    <p class="ev-foot">
+      Mốc tính theo số tiền chuyển thật, không tính phần cộng thêm theo %.<br>
+      Ngày đổi lúc 00:00 giờ Việt Nam. Bỏ một ngày không mất tiến độ đã có.
+    </p>
+  </div>
+</main>
+
+<div class="ev-toast" id="evToast"></div>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => new Intl.NumberFormat("vi-VN").format(n);
+
+
+  const TOPUP_HREF = "topup.html";
+
+  const STAR_LAYOUT = {
+    1:[[50,50]],
+    2:[[36,36],[64,64]],
+    3:[[50,30],[33,64],[67,64]],
+    4:[[34,34],[66,34],[34,66],[66,66]],
+    5:[[32,32],[68,32],[50,50],[32,68],[68,68]],
+    6:[[31,36],[50,36],[69,36],[31,64],[50,64],[69,64]],
+    7:[[50,25],[28,39],[72,39],[50,50],[28,61],[72,61],[50,75]]
+  };
+
+  function buildOrbs(days, canClaim) {
+    const box = $("evOrbs");
+    box.innerHTML = "";
+    days.forEach((d, i) => {
+      const orb = document.createElement("div");
+      orb.className = "ev-orb";
+      if (d.day === 7) orb.dataset.final = "1";
+
+      let state = "locked";
+      if (d.done) state = (d.day === 7 && canClaim) ? "ready" : "done";
+      else if (d.active) state = "active";
+      orb.dataset.state = state;
+
+      const label = d.done ? "đã thu" : d.active ? "đang gom hôm nay" : "chưa mở";
+      orb.setAttribute("role", "img");
+      orb.setAttribute("aria-label", `Viên số ${d.day}, mốc ${fmt(d.required)} đồng, ${label}`);
+
+      STAR_LAYOUT[d.day].forEach(([x, y]) => {
+        const s = document.createElement("i");
+        s.className = "ev-star";
+        s.style.left = x + "%";
+        s.style.top = y + "%";
+        orb.appendChild(s);
+      });
+
+      box.appendChild(orb);
+      setTimeout(() => orb.classList.add("is-in"), 70 * i);
+    });
+  }
+
+  function buildLadder(days) {
+    $("evLadder").innerHTML = days.map((d) => {
+      const k = d.done ? "done" : d.active ? "active" : "lock";
+      const text = d.done ? "Đã thu" : d.active ? "Hôm nay" : "Chưa mở";
+      return `<div class="ev-row" data-done="${d.done ? 1 : 0}">
+        <span class="ev-row-day">Ngày ${d.day}</span>
+        <span class="ev-row-amount">${fmt(d.required)} đ</span>
+        <span class="ev-chip" data-k="${k}">${text}</span>
+      </div>`;
+    }).join("");
+  }
+
+  function render(s) {
+    const t = s.todayStatus;
+
+    buildOrbs(s.days, s.canClaim);
+    buildLadder(s.days);
+    $("evTrackFill").style.width =
+      (Math.max(0, s.currentDay - 1) / (s.totalDays - 1) * 100) + "%";
+
+    const label = $("evTodayLabel"), amount = $("evTodayAmount"),
+          note = $("evTodayNote"), bar = $("evTodayBar"), topup = $("evTopupBtn");
+
+    if (s.rewardClaimed) {
+      label.textContent = "Sự kiện đã hoàn thành";
+      amount.textContent = "Xong";
+      note.innerHTML = `Bạn đã thu đủ 7 viên và nhận <b>${fmt(s.rewardVnd)} VNĐ</b>.`;
+      bar.classList.add("ev-hide"); topup.classList.add("ev-hide");
+    } else if (s.allDaysDone) {
+      label.textContent = "Đủ 7 viên";
+      amount.textContent = "Nhận thưởng";
+      note.innerHTML = `Bấm <b>Nhận ${fmt(s.rewardVnd)} VNĐ</b> ở dưới để cộng vào tài khoản.`;
+      bar.classList.add("ev-hide"); topup.classList.add("ev-hide");
+    } else if (t.collected) {
+      const next = s.days[s.currentDay];
+      label.textContent = `Đã thu viên số ${s.currentDay}`;
+      amount.textContent = "Hẹn mai";
+      note.innerHTML = `Quay lại mai để gom viên số ${next.day} — mốc <b>${fmt(next.required)} đ</b>.`;
+      bar.classList.add("ev-hide"); topup.classList.add("ev-hide");
+    } else {
+      const partial = t.paid > 0;
+      label.textContent = partial ? "Hôm nay cần nạp thêm" : "Hôm nay cần nạp";
+      amount.innerHTML = `${fmt(t.remaining)}<span>đ</span>`;
+      note.innerHTML = `Nạp đủ <b>${fmt(t.required)} đ</b> trong hôm nay để thu viên số ${t.dayIndex}.`;
+      topup.classList.remove("ev-hide");
+      topup.href = TOPUP_HREF;
+      if (partial) {
+        bar.classList.remove("ev-hide");
+        $("evBarFill").style.width = Math.min(100, t.paid / t.required * 100) + "%";
+        $("evBarPaid").textContent = `${fmt(t.paid)} đ`;
+        $("evBarNeed").textContent = `/ ${fmt(t.required)} đ`;
+      } else {
+        bar.classList.add("ev-hide");
+      }
+    }
+
+    const claim = $("evClaimBtn");
+    $("evRewardAmount").innerHTML = `${fmt(s.rewardVnd)} <small>VNĐ</small>`;
+    $("evReward").classList.toggle("is-ready", s.canClaim);
+
+    if (s.rewardClaimed) {
+      claim.disabled = true;
+      claim.textContent = "Đã nhận";
+      $("evRewardNote").textContent = "Số tiền đã được cộng vào ví và tổng nạp.";
+    } else if (s.canClaim) {
+      claim.disabled = false;
+      claim.textContent = `Nhận ${fmt(s.rewardVnd)} VNĐ`;
+      $("evRewardNote").textContent = "Cộng vào ví và tổng nạp ngay khi bấm.";
+    } else {
+      claim.disabled = true;
+      claim.textContent = `Còn ${s.totalDays - s.currentDay} viên nữa`;
+      $("evRewardNote").textContent = `Tổng cần nạp cả sự kiện: ${fmt(s.totalRequired)} đ.`;
+    }
+
+    $("evLoading").classList.add("ev-hide");
+    $("evError").classList.add("ev-hide");
+    $("evMain").classList.remove("ev-hide");
+  }
+
+  function showError(msg, action) {
+    $("evLoading").classList.add("ev-hide");
+    $("evMain").classList.add("ev-hide");
+    $("evErrorText").textContent = msg;
+    const btn = $("evErrorBtn");
+    btn.textContent = action.text;
+    btn.onclick = action.run;
+    $("evError").classList.remove("ev-hide");
+  }
+
+  function toast(msg) {
+    const el = $("evToast");
+    el.textContent = msg;
+    el.classList.add("is-show");
+    setTimeout(() => el.classList.remove("is-show"), 2600);
+  }
+
+  const goLogin = { text: "Đăng nhập", run: () => { window.location.href = "login.html"; } };
+  const retry   = { text: "Thử lại",   run: () => { $("evError").classList.add("ev-hide");
+                                                    $("evLoading").classList.remove("ev-hide");
+                                                    load(); } };
+
+  async function load() {
+    if (!isLoggedIn()) {
+      return showError("Bạn cần đăng nhập để xem tiến độ sự kiện.", goLogin);
+    }
+
+    const res = await getDailyEvent();
+
+    if (res.httpStatus === 401 || res.httpStatus === 403) {
+      clearLogin();
+      return showError("Phiên đăng nhập đã hết. Đăng nhập lại để xem tiến độ.", goLogin);
+    }
+    if (!res.success) {
+      return showError(res.message || "Không tải được tiến độ sự kiện.", retry);
+    }
+
+    render(res.data);
+  }
+
+  $("evClaimBtn").addEventListener("click", async () => {
+    const btn = $("evClaimBtn");
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Đang nhận...";
+
+    const res = await claimDailyEvent();
+
+    if (res.success) {
+      toast(res.message || "Đã nhận thưởng");
+      load();
+      return;
+    }
+
+    if (res.httpStatus === 0) {
+      toast("Mất kết nối, đang kiểm tra lại");
+      load();
+      return;
+    }
+
+    toast(res.message || "Không nhận được thưởng");
+    load();
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
