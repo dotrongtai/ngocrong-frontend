@@ -1,3 +1,6 @@
+// ⚙️ API Base URL - trỏ sang backend đã deploy trên Railway
+const API_BASE_URL = "https://ngocrong-backend-production.up.railway.app/api";
+
 const loginLink = document.getElementById('loginLink');
 const registerLink = document.getElementById('registerLink');
 const loginModal = document.getElementById('loginModal');
@@ -85,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password })
@@ -136,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5000/api/auth/register", {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password, confirmPassword })
@@ -157,9 +160,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  const profileUsername = document.getElementById("profileUsername");
-  if (profileUsername) {
+  const isProfilePage = window.location.pathname.includes("profile");
+  if (isProfilePage) {
     loadProfileData();
+  }
+
+  const changePasswordForm = document.getElementById("changePasswordForm");
+  if (changePasswordForm) {
+    changePasswordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const oldPassword = document.getElementById("oldPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const msgDiv = document.getElementById("changePasswordMessage");
+
+      if (!oldPassword || !newPassword) {
+        showMessage(msgDiv, "Vui lòng điền đầy đủ thông tin", "error");
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        showMessage(msgDiv, "Mật khẩu mới phải từ 6 ký tự trở lên", "error");
+        return;
+      }
+
+      if (msgDiv) {
+        msgDiv.textContent = "⏳ Đang xử lý...";
+        msgDiv.className = "message";
+      }
+
+      try {
+        const result = await apiCall("/auth/change-password", "POST", { oldPassword, newPassword });
+
+        if (result.success) {
+          showMessage(msgDiv, "✅ Đổi mật khẩu thành công!", "success");
+          changePasswordForm.reset();
+          setTimeout(() => {
+            closeModal("changePasswordModal");
+          }, 1500);
+        } else {
+          showMessage(msgDiv, result.message || "Đổi mật khẩu thất bại", "error");
+        }
+      } catch (err) {
+        showMessage(msgDiv, "Lỗi kết nối đến server!", "error");
+      }
+    });
   }
 });
 
@@ -193,7 +237,7 @@ async function checkAuthStatus() {
     if (rechargeNav) rechargeNav.classList.remove("hidden");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
         method: "GET",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -223,7 +267,7 @@ async function loadProfileData() {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/auth/profile", {
+    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
       method: "GET",
       headers: { "Authorization": `Bearer ${token}` }
     });
@@ -231,10 +275,13 @@ async function loadProfileData() {
 
     if (data.success) {
       document.getElementById("profileUsername").innerText = data.user.username;
-      document.getElementById("profileId").innerText = data.user.id;
       if (data.user.create_time) {
         document.getElementById("profileCreated").innerText = new Date(data.user.create_time).toLocaleDateString("vi-VN");
       }
+      const tongnapEl = document.getElementById("profileTongnap");
+      const vndEl = document.getElementById("profileVnd");
+      if (tongnapEl) tongnapEl.innerText = Number(data.user.tongnap || 0).toLocaleString("vi-VN") + "đ";
+      if (vndEl) vndEl.innerText = Number(data.user.vnd || 0).toLocaleString("vi-VN") + "đ";
     } else {
       localStorage.removeItem("token");
       localStorage.removeItem("user");

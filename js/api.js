@@ -1,6 +1,4 @@
-// ⚙️ API Configuration
-const API_BASE_URL = "https://ngocrong-backend-production.up.railway.app/api";
-// 📡 Generic API call function
+
 async function apiCall(endpoint, method = 'GET', data = null) {
   try {
     const config = {
@@ -10,7 +8,6 @@ async function apiCall(endpoint, method = 'GET', data = null) {
       }
     };
 
-    // Add token if exists
     const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

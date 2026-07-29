@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nạp Tiền - Ngọc Rồng Hoa Mai</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  .topup-page {
+    min-height: 100vh;
+    padding: 100px 16px 60px;
+    color: #f3e9ff;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .topup-wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  @media (max-width: 800px) {
+    .topup-wrap { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: rgba(20, 10, 35, 0.55);
+    border: 1px solid rgba(255,204,0,0.25);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .panel h2 {
+    color: #ffcc00;
+    font-size: 19px;
+    margin: 0 0 6px;
+  }
+  .panel .sub { color: #c9b8e8; font-size: 13px; margin-bottom: 18px; }
+
+  /* ===== Cột trái: bảng mốc thưởng ===== */
+  .tier-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .tier-row.highlight {
+    border-color: #ffcc00;
+    background: rgba(255,204,0,0.08);
+  }
+  .tier-row .amount { font-weight: 700; color: #fff; font-size: 14px; }
+  .tier-row .note { font-size: 11px; color: #8f7fae; margin-top: 3px; }
+  .tier-row .bonus {
+    font-weight: 800;
+    color: #6bffb0;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .tier-row .bonus.zero { color: #8f7fae; }
+
+  /* ===== Cột phải: form + QR ===== */
+  .amount-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .amount-btn {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,204,0,0.3);
+    background: rgba(255,255,255,0.05);
+    color: #f3e9ff;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+  }
+  .amount-btn.active {
+    background: linear-gradient(135deg, #ff8a00, #ff3d00);
+    border-color: transparent;
+    color: #fff;
+  }
+  .topup-page input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,204,0,0.3);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .preview-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #c9b8e8;
+    padding: 6px 2px;
+  }
+  .preview-line b { color: #ffcc00; }
+  .submit-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ff8a00, #ff3d00);
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .submit-btn:disabled { opacity: 0.6; cursor: wait; }
+  .msg { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
+  .msg.error { color: #ff6b6b; }
+  .msg.success { color: #6bffb0; }
+
+  .qr-box {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+  }
+  .qr-box.show { display: block; }
+  #qrcodeCanvas {
+    display: inline-block;
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+  }
+  .qr-status {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #c9b8e8;
+  }
+  .qr-status.waiting::after {
+    content: "";
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #ffcc00;
+    margin-left: 6px;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  .open-checkout-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ffcc00;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="topup-page">
+  <div class="topup-wrap">
+    <div class="panel">
+      <h2>🎁 Ưu Đãi Nạp Tiền</h2>
+      <p class="sub">Nạp càng nhiều, thưởng càng lớn — cộng thẳng vào tài khoản, không cần chờ duyệt.</p>
+      <div class="tier-row">
+        <div>
+          <div class="amount">Dưới 100.000đ</div>
+          <div class="note">Không áp dụng thưởng</div>
+        </div>
+        <div class="bonus zero">+0%</div>
+      </div>
+
+      <div class="tier-row">
+        <div>
+          <div class="amount">Từ 100.000đ</div>
+          <div class="note">Ví dụ nạp 100.000đ → nhận 110.000đ</div>
+        </div>
+        <div class="bonus">+10%</div>
+      </div>
+
+      <div class="tier-row">
+        <div>
+          <div class="amount">Từ 200.000đ</div>
+          <div class="note">Ví dụ nạp 200.000đ → nhận 230.000đ</div>
+        </div>
+        <div class="bonus">+15%</div>
+      </div>
+
+      <div class="tier-row highlight">
+        <div>
+          <div class="amount">Từ 500.000đ 🔥</div>
+          <div class="note">Ví dụ nạp 500.000đ → nhận 600.000đ</div>
+        </div>
+        <div class="bonus">+20%</div>
+      </div>
+    </div>
+
+    <!-- CỘT PHẢI: FORM + QR -->
+    <div class="panel">
+      <h2>💳 Tạo Mã Thanh Toán</h2>
+      <p class="sub">Quét mã QR bằng app ngân hàng để chuyển khoản, hệ thống tự cộng tiền.</p>
+
+      <div class="amount-options" id="amountOptions">
+        <div class="amount-btn" data-amount="50000">50.000đ</div>
+        <div class="amount-btn" data-amount="100000">100.000đ</div>
+        <div class="amount-btn" data-amount="200000">200.000đ</div>
+        <div class="amount-btn" data-amount="500000">500.000đ</div>
+      </div>
+
+      <input type="number" id="customAmount" placeholder="Hoặc nhập số tiền khác (tối thiểu 10.000đ)" min="10000" step="1000">
+
+      <div class="preview-line">
+        <span>Số tiền nạp:</span>
+        <b id="previewAmount">0đ</b>
+      </div>
+      <div class="preview-line">
+        <span>Thưởng thêm:</span>
+        <b id="previewBonus">+0%</b>
+      </div>
+      <div class="preview-line">
+        <span>Nhận vào tài khoản:</span>
+        <b id="previewTotal">0đ</b>
+      </div>
+
+      <button class="submit-btn" id="submitBtn">Tạo Mã Thanh Toán</button>
+      <div class="msg" id="msg"></div>
+
+      <div class="qr-box" id="qrBox">
+        <div id="qrcodeCanvas"></div>
+        <div class="qr-status waiting" id="qrStatus">Đang chờ thanh toán...</div>
+        <a href="#" target="_blank" class="open-checkout-link" id="openCheckoutLink">Không quét được? Mở trang thanh toán</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+let selectedAmount = null;
+let pollInterval = null;
+
+function getBonusPercent(amount) {
+  if (amount >= 500000) return 20;
+  if (amount >= 200000) return 15;
+  if (amount >= 100000) return 10;
+  return 0;
+}
+
+function formatVND(n) {
+  return n.toLocaleString("vi-VN") + "đ";
+}
+
+function updatePreview() {
+  const amount = selectedAmount || 0;
+  const bonus = getBonusPercent(amount);
+  const total = amount + Math.round((amount * bonus) / 100);
+  document.getElementById("previewAmount").textContent = formatVND(amount);
+  document.getElementById("previewBonus").textContent = `+${bonus}%`;
+  document.getElementById("previewTotal").textContent = formatVND(total);
+}
+
+document.querySelectorAll(".amount-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedAmount = Number(btn.dataset.amount);
+    document.getElementById("customAmount").value = "";
+    updatePreview();
+  });
+});
+
+document.getElementById("customAmount").addEventListener("input", (e) => {
+  document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("active"));
+  selectedAmount = Number(e.target.value) || 0;
+  updatePreview();
+});
+
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  const msg = document.getElementById("msg");
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    msg.className = "msg error";
+    msg.textContent = "Vui lòng đăng nhập trước!";
+    setTimeout(() => (window.location.href = "login.html"), 1200);
+    return;
+  }
+
+  if (!selectedAmount || selectedAmount < 10000) {
+    msg.className = "msg error";
+    msg.textContent = "Vui lòng chọn hoặc nhập số tiền hợp lệ (tối thiểu 10.000đ)";
+    return;
+  }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "Đang tạo mã...";
+  msg.textContent = "";
+  if (pollInterval) clearInterval(pollInterval);
+
+  try {
+    const result = await apiCall("/recharge/create", "POST", { amount: selectedAmount });
+
+    if (result.success) {
+      msg.className = "msg success";
+      msg.textContent = "Đã tạo mã! Quét QR bên dưới để thanh toán.";
+
+      // Hiển thị QR ngay trên trang bằng thư viện qrcodejs (render từ chuỗi VietQR do PayOS trả về)
+      const qrBox = document.getElementById("qrBox");
+      const qrDiv = document.getElementById("qrcodeCanvas");
+      qrDiv.innerHTML = "";
+      new QRCode(qrDiv, {
+        text: result.qrCode,
+        width: 220,
+        height: 220,
+      });
+      qrBox.classList.add("show");
+
+      document.getElementById("openCheckoutLink").href = result.checkoutUrl;
+      document.getElementById("qrStatus").textContent = "Đang chờ thanh toán...";
+      document.getElementById("qrStatus").className = "qr-status waiting";
+
+      // Kiểm tra định kỳ trạng thái giao dịch mỗi 3 giây
+      pollInterval = setInterval(() => checkStatus(result.orderCode), 3000);
+    } else {
+      msg.className = "msg error";
+      msg.textContent = result.message || "Tạo giao dịch thất bại";
+    }
+  } catch (err) {
+    msg.className = "msg error";
+    msg.textContent = "Lỗi kết nối server!";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Tạo Mã Thanh Toán";
+  }
+});
+
+async function checkStatus(orderCode) {
+  try {
+    const result = await apiCall(`/recharge/status/${orderCode}`, "GET");
+    if (result.success && result.status === "success") {
+      clearInterval(pollInterval);
+      const statusEl = document.getElementById("qrStatus");
+      statusEl.textContent = "✅ Thanh toán thành công! Đã cộng tiền vào tài khoản.";
+      statusEl.className = "qr-status";
+      statusEl.style.color = "#6bffb0";
+    }
+  } catch (err) {
+  }
+}
+</script>
+
+</body>
+</html>

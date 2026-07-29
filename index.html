@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- MÀN HÌNH CHỜ (SPLASH SCREEN) - HIỂN THỊ 5 GIÂY VÀ HIỆU ỨNG HOA MAI RƠI -->
   <div id="splashScreen">
     <div class="apricot-falling-container" id="apricotContainer"></div>
     <div class="splash-content">
@@ -23,16 +22,9 @@
       <div class="loader-text" id="loaderText">Đang tải dữ liệu... (0%)</div>
     </div>
   </div>
-
-  <!-- HIỆU ỨNG HOA MAI RƠI XUYÊN SUỐT TRANG CHÍNH -->
   <div class="apricot-falling-container" id="mainApricotContainer"></div>
-
   <div class="container">
-    
-    <!-- HEADER ĐƯỢC TẢI TỰ ĐỘNG TỪ header.html -->
     <div id="header-placeholder"></div>
-
-    <!-- HERO / MAIN CONTENT -->
     <div id="mainContent" class="main-content">
       <div class="hero-banner">
         <h2>🌸 CHÀO MỪNG ĐẾN VỚI NRO HOA MAI 🌸</h2>
@@ -60,14 +52,13 @@
         </div>
 
         <div class="feature-card" id="rechargeSection">
-          <h3><i class="fa-solid fa-wallet"></i> Nạp Thẻ Cào / Momo</h3>
-          <p>Hệ thống nạp thẻ tự động chiết khấu cao, nhận ngay hồng ngọc và ưu đãi nạp đầu.</p>
-          <button class="btn-secondary" onclick="openRechargeModal()"><i class="fa-solid fa-coins"></i> Nạp Thẻ Ngay</button>
+          <h3><i class="fa-solid fa-wallet"></i> Nạp Tiền</h3>
+          <p>Hệ thống nạp tiền không chiết khấu nhận ngay tài khoản không phải chờ đợi!</p>
+          <a href="topup.html" class="btn-secondary" style="text-decoration:none; display:inline-block; text-align:center;"><i class="fa-solid fa-coins"></i> Nạp Thẻ Ngay</a>
         </div>
       </div>
     </div>
 
-    <!-- PROFILE MODAL -->
     <div id="profilePageModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeModal('profilePageModal')">&times;</span>
@@ -81,7 +72,6 @@
       </div>
     </div>
 
-    <!-- CHANGE PASSWORD MODAL -->
     <div id="changePasswordModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
@@ -94,56 +84,24 @@
         <div id="changePasswordMessage" class="message"></div>
       </div>
     </div>
-
-    <!-- RECHARGE MODAL -->
-    <div id="rechargeModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('rechargeModal')">&times;</span>
-        <h2>💳 Nạp Thẻ Cào Siêu Tốc</h2>
-        <form id="rechargeForm">
-          <select id="cardType" class="select-custom">
-            <option value="VIETTEL">Viettel</option>
-            <option value="VINAPHONE">Vinaphone</option>
-            <option value="MOBIFONE">Mobifone</option>
-          </select>
-          <select id="cardAmount" class="select-custom">
-            <option value="10000">10.000 VNĐ</option>
-            <option value="50000">50.000 VNĐ</option>
-            <option value="100000">100.000 VNĐ</option>
-            <option value="500000">500.000 VNĐ</option>
-          </select>
-          <input type="text" id="cardSerial" placeholder="Số Seri thẻ" required>
-          <input type="text" id="cardCode" placeholder="Mã thẻ cào" required>
-          <button type="submit" class="btn-primary">Nạp Thẻ Ngay</button>
-        </form>
-        <div id="rechargeMessage" class="message"></div>
-      </div>
-    </div>
   </div>
 
  <script>
   document.addEventListener("DOMContentLoaded", () => {
     const splashScreen = document.getElementById("splashScreen");
-    
-    // Kiểm tra xem đã xem màn hình chờ trong phiên này chưa
-    if (sessionStorage.getItem("hasLoadedSplash")) {
-      // Nếu đã xem rồi thì ẩn ngay lập tức, không chạy lại hiệu ứng nữa
+        if (sessionStorage.getItem("hasLoadedSplash")) {
       if (splashScreen) {
         splashScreen.style.display = "none";
       }
     } else {
-      // Nếu là vào trang lần đầu tiên thì chạy hiệu ứng 5 giây
       sessionStorage.setItem("hasLoadedSplash", "true");
-      
       let progress = 0;
       const loaderBar = document.getElementById("loaderBar");
       const loaderText = document.getElementById("loaderText");
-
       const interval = setInterval(() => {
         progress += 2;
         if (loaderBar) loaderBar.style.width = progress + "%";
         if (loaderText) loaderText.innerText = `Đang tải dữ liệu... (${progress}%)`;
-
         if (progress >= 100) {
           clearInterval(interval);
           if (splashScreen) {
@@ -155,11 +113,9 @@
         }
       }, 20);
     }
-
     createApricotFlowers("apricotContainer");
     createApricotFlowers("mainApricotContainer");
   });
-
   function createApricotFlowers(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -180,9 +136,6 @@
   }
   function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
-  }
-  function openRechargeModal() {
-    openModal('rechargeModal');
   }
 </script>
   <script src="js/api.js"></script>

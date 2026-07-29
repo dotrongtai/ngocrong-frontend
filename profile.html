@@ -15,8 +15,9 @@
     <h2>👤 Thông Tin Tài Khoản</h2>
     <div class="profile-info" style="margin: 20px 0; line-height: 1.8;">
       <p><strong>Tên đăng nhập:</strong> <span id="profileUsername">Đang tải...</span></p>
-      <p><strong>ID Nhân Vật:</strong> <span id="profileId">Đang tải...</span></p>
       <p><strong>Ngày tạo tài khoản:</strong> <span id="profileCreated">Đang tải...</span></p>
+      <p><strong>Tổng đã nạp:</strong> <span id="profileTongnap">Đang tải...</span></p>
+      <p><strong>Số dư hiện tại:</strong> <span id="profileVnd">Đang tải...</span></p>
     </div>
     
     <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -33,8 +34,14 @@
       <span class="close" onclick="closeModal('changePasswordModal')">&times;</span>
       <h2>🔒 Đổi Mật Khẩu</h2>
       <form id="changePasswordForm">
-        <input type="password" id="oldPassword" placeholder="Mật khẩu cũ" required>
-        <input type="password" id="newPassword" placeholder="Mật khẩu mới (6+ ký tự)" required>
+        <div style="position: relative;">
+          <input type="password" id="oldPassword" placeholder="Mật khẩu cũ" required style="width: 100%; box-sizing: border-box; padding-right: 40px;">
+          <i class="fa-solid fa-eye toggle-eye" data-target="oldPassword" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999;"></i>
+        </div>
+        <div style="position: relative;">
+          <input type="password" id="newPassword" placeholder="Mật khẩu mới (6+ ký tự)" required style="width: 100%; box-sizing: border-box; padding-right: 40px;">
+          <i class="fa-solid fa-eye toggle-eye" data-target="newPassword" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999;"></i>
+        </div>
         <button type="submit" class="btn-primary">Cập Nhật Mật Khẩu</button>
       </form>
       <div id="changePasswordMessage" class="message"></div>
@@ -48,8 +55,21 @@
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = "none";
     }
+    document.querySelectorAll(".toggle-eye").forEach((icon) => {
+      icon.addEventListener("click", () => {
+        const input = document.getElementById(icon.dataset.target);
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          input.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      });
+    });
   </script>
-  <script src="js/security.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
 </body>

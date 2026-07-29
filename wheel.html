@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vòng Quay May Mắn - Ngọc Rồng Hoa Mai</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/wheel.css">
+<style>
+  /* CSS bổ sung để bôi xám (mờ) ô đã quay */
+  .wheel-sector.disabled-sector {
+    opacity: 0.35;
+    filter: grayscale(100%);
+    pointer-events: none;
+  }
+  .claimed-btn {
+    background-color: #6c757d !important;
+    cursor: not-allowed !important;
+  }
+
+  /* Tooltip cho số lượng */
+  .item-icon {
+    position: relative;
+  }
+
+  .quantity-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff6b6b;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    border: 2px solid white;
+  }
+
+  .wheel-sector {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .wheel-sector:hover:not(.disabled-sector) {
+    transform: scale(1.05);
+  }
+
+  .wheel-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .info-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #00FF00;
+    color: black;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .info-btn:hover {
+    background-color: #ff5252;
+    transform: scale(1.1);
+  }
+
+  /* Banner cảnh báo người chơi */
+  .offline-warning-banner {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin: 10px auto 15px;
+    max-width: 550px;
+    text-align: center;
+    font-size: 13.5px;
+    line-height: 1.5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+
+  .danger-text {
+    color: #d9534f;
+    font-weight: bold;
+  }
+
+  /* Modal Popup Chung */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+    position: relative;
+  }
+
+  .modal-content h2 {
+    color: #3a1d63;
+    margin-top: 0;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  .modal-content h3 {
+    color: #5a2e8c;
+    margin-top: 20px;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 10px;
+  }
+
+  .modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+  }
+
+  .modal-content li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .modal-content li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #ff6b6b;
+    font-weight: bold;
+  }
+
+  .close-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+  }
+
+  .close-btn:hover {
+    background-color: #5a6268;
+  }
+
+  /* Pop-up Xác Nhận Nhận Quà */
+  .confirm-box {
+    text-align: center;
+  }
+
+  .confirm-icon {
+    font-size: 45px;
+    color: #ffc107;
+    margin-bottom: 10px;
+  }
+
+ .confirm-warning-list {
+  background: #fff8e1;
+  border: 1px dashed #ffe082;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: left;
+  margin: 15px 0;
+  font-size: 14px;
+  color: #000;
+}
+
+.confirm-warning-list p {
+  margin: 6px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.confirm-warning-list p:last-child {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-confirm {
+    flex: 1;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+
+  .btn-confirm:hover {
+    background: #218838;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+
+  .btn-cancel:hover {
+    background: #c82333;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Khu vực hiển thị hồng ngọc + chi phí lượt quay */
+  .wheel-currency-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 10px 0 15px;
+    font-weight: bold;
+  }
+
+  .currency-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 6px 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    color: #3a1d63;
+    font-size: 14px;
+  }
+
+  .currency-pill.cost {
+    color: #ff6b6b;
+  }
+
+  .hub.disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<!-- Modal Hướng Dẫn / Luật Chơi -->
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <h2>🎡 Vòng Quay May Mắn</h2>
+
+    <h3>📋 Luật Chơi</h3>
+    <ul>
+      <li>Người chơi dùng <strong>hồng ngọc</strong> để quay, lần lượt nhận hết 10 phần quà có trong vòng quay</li>
+      <li>Chi phí lượt quay tăng dần theo từng lượt, tổng cộng 10 lượt tốn <strong>2.000 hồng ngọc</strong></li>
+      <li>Quay đủ 10 lượt chắc chắn nhận cải trang <strong>Frieren vĩnh viễn</strong> ở lượt quay cuối cùng</li>
+      <li>Sở hữu thêm <strong>Pet rồng</strong> và <strong>Phượng hoàng lửa</strong> ở 2 lượt gần cuối để gia tăng sức mạnh</li>
+      <li>Vật phẩm đã quay trúng sẽ không quay ra tiếp nữa</li>
+    </ul>
+
+    <h3>🎁 Chi Tiết Phần Thưởng</h3>
+    <div id="rewardDetails" style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; background-color: #f9f9f9;">
+      Đang tải danh sách phần thưởng...
+    </div>
+
+    <button class="close-btn" onclick="closeInfoModal()">Đóng</button>
+  </div>
+</div>
+
+<!-- Modal Pop-up Xác Nhận Nhận Quà Vào Game -->
+<div class="modal" id="claimModal">
+  <div class="modal-content confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <h2 style="color:#ddd;">XÁC NHẬN NHẬN QUÀ</h2>
+    
+    <div class="confirm-warning-list">
+  <p style="color: #000;">
+    <span>🔴</span>
+    <span>Vui lòng đảm bảo bạn đã <strong>ĐĂNG XUẤT</strong> khỏi game.</span>
+  </p>
+
+  <p style="color: #000;">
+    <span>🔴</span>
+    <span>Đảm bảo hành trang còn <strong>ĐỦ Ô TRỐNG</strong> để chứa quà.</span>
+  </p>
+
+  <p>
+    <span style="color:#d9534f;">🚨</span>
+    <span style="color:#d9534f; font-weight:bold;">
+      Mất quà do đầy hành trang ADMIN không giải quyết!
+    </span>
+  </p>
+</div>
+
+    <p style="font-size:14px; color:#ddd; margin-bottom: 0;">Bạn có chắc chắn muốn tiến hành gửi quà vào tài khoản?</p>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeClaimModal()">Hủy Bỏ</button>
+      <button class="btn-confirm" id="btnConfirmClaim">Nhận Quà</button>
+    </div>
+  </div>
+</div>
+
+<div class="wheel-page">
+  <h1 class="wheel-title">
+    🎡 Vòng Quay May Mắn
+    <button class="info-btn" id="infoBtn" title="Xem luật chơi" aria-label="Xem luật chơi">!</button>
+  </h1>
+  <p class="sub">Frieren đang chờ đợi người xứng đáng... Hãy quay vòng quay may mắn và mang cô ấy về bên bạn! ✨</p>3.
+  
+
+  <div class="wheel-currency-bar">
+    <div class="currency-pill" id="hongNgocPill">💎 Hồng ngọc: <span id="hongNgocValue">--</span></div>
+    <div class="currency-pill cost" id="nextCostPill">🎯 Lượt tiếp theo: <span id="nextCostValue">--</span> hồng ngọc</div>
+  </div>
+
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
+    <div class="hub" id="spinBtn">QUAY</div>
+  </div>
+
+  <div class="history-box">
+    <h3>📜 Lịch Sử Quay</h3>
+    <div id="historyList"><div class="history-empty">Đang tải...</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/prizes.js"></script>
+<script>
+
+let state = {
+  rewards: [],
+  currentRotation: 0,
+  spinning: false,
+  currentUser: null,
+  hongNgoc: 0,
+  nextSpinCost: null,
+  canSpin: false,
+  pendingClaimId: null,      // Lưu ID quà đang chờ nhận
+  pendingClaimBtn: null      // Lưu Nút đang bấm
+};
+
+const wheelEl = document.getElementById("wheel");
+
+// Kiểm tra một ô (theo index trên vòng quay) đã được quay trúng trước đó chưa
+function isPrizeWon(prize, index) {
+  return state.rewards.some(r => r.wheel_index === index);
+}
+
+// ============ VẼ VÒNG QUAY ============
+function renderWheel() {
+  wheelEl.innerHTML = "";
+  const step = 360 / PRIZES.length;
+
+  let gradientParts = [];
+  for (let i = 0; i < PRIZES.length; i++) {
+    const color = SECTOR_COLORS[i % 2];
+    gradientParts.push(`${color} ${i * step}deg ${(i + 1) * step}deg`);
+  }
+  wheelEl.style.background = `conic-gradient(${gradientParts.join(",")})`;
+
+  const radius = wheelEl.clientWidth / 2 * 0.7;
+
+  PRIZES.forEach((p, i) => {
+    const sector = document.createElement("div");
+    sector.className = "wheel-sector";
+
+    if (isPrizeWon(p, i)) {
+      sector.classList.add("disabled-sector");
+    }
+
+    const centerAngle = i * step + step / 2;
+    sector.style.transform = `rotate(${centerAngle}deg) translate(0, -${radius}px)`;
+
+    const wrap = document.createElement("div");
+    wrap.className = "item-icon";
+    wrap.style.transform = `translate(-50%, -50%) rotate(${-centerAngle}deg)`;
+
+    const img = document.createElement("img");
+    img.src = p.icon;
+    img.alt = p.name;
+    img.title = `${p.name} x${p.quantity}`;
+    img.onerror = function () {
+      const fallback = document.createElement("div");
+      fallback.className = "fallback-icon";
+      fallback.textContent = "🎁";
+      img.replaceWith(fallback);
+    };
+    wrap.appendChild(img);
+    const label = document.createElement("span");
+    label.textContent = p.name;
+    wrap.appendChild(label);
+
+    sector.appendChild(wrap);
+    wheelEl.appendChild(sector);
+  });
+}
+
+// ============ RENDER LỊCH SỬ ============
+function renderHistory() {
+  const list = document.getElementById("historyList");
+
+  if (state.rewards.length === 0) {
+    list.innerHTML = `<div class="history-empty">Bạn chưa có quà nào. Hãy quay!</div>`;
+    return;
+  }
+
+  list.innerHTML = "";
+
+  [...state.rewards].reverse().forEach((reward) => {
+    const prize = PRIZES[reward.wheel_index] || PRIZES.find(p => p.id === reward.item_id) || { name: 'Quà', quantity: 1, icon: 'assets/images/items/ngoc-500.png' };
+    const isClaimed = reward.status === "claimed";
+
+    const row = document.createElement("div");
+    row.className = "history-item";
+    row.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="${prize.icon}" alt="" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;"
+             onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;&quot;>🎁</div>'">
+        <div>
+          <div class="prize">${prize.name} x${prize.quantity}</div>
+          <div class="time">${new Date(reward.spin_time).toLocaleString("vi-VN")}</div>
+        </div>
+      </div>
+      <button class="claim-btn ${isClaimed ? 'claimed-btn' : ''}"
+              data-reward-id="${reward.id}"
+              ${isClaimed ? 'disabled' : ''}
+              onclick="openClaimModal(${reward.id}, this)">
+        ${isClaimed ? 'Đã nhận' : 'Nhận vào Game'}
+      </button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+// ============ CẬP NHẬT UI HỒNG NGỌC / CHI PHÍ ============
+function renderCurrencyBar() {
+  document.getElementById("hongNgocValue").textContent = state.hongNgoc.toLocaleString("vi-VN");
+
+  const nextCostEl = document.getElementById("nextCostValue");
+  const spinBtn = document.getElementById("spinBtn");
+
+  if (state.nextSpinCost === null) {
+    nextCostEl.textContent = "Đã hết lượt";
+    spinBtn.classList.add("disabled");
+    return;
+  }
+
+  nextCostEl.textContent = state.nextSpinCost.toLocaleString("vi-VN");
+
+  if (!state.canSpin) {
+    spinBtn.classList.add("disabled");
+  } else {
+    spinBtn.classList.remove("disabled");
+  }
+}
+
+// ============ LOAD TRẠNG THÁI (hồng ngọc, chi phí lượt kế tiếp) ============
+async function loadStatus() {
+  try {
+    const result = await apiCall("/reward/status", "GET");
+    if (result && result.success) {
+      state.hongNgoc = result.hongNgoc;
+      state.nextSpinCost = result.nextSpinCost;
+      state.canSpin = result.canSpin;
+    }
+    renderCurrencyBar();
+  } catch (error) {
+    console.error("Load status error:", error);
+  }
+}
+
+// ============ LOAD TOÀN BỘ LỊCH SỬ TỪ SERVER ============
+async function loadRewards() {
+  try {
+    const token = localStorage.getItem("token");
+    const user = getStoredUser();
+
+    if (!token || !user) {
+      state.rewards = [];
+      state.currentUser = null;
+      renderHistory();
+      renderWheel();
+      return;
+    }
+
+    if (state.currentUser && state.currentUser.id !== user.id) {
+      state.rewards = [];
+    }
+    state.currentUser = user;
+
+    const result = await apiCall("/reward/history", "GET");
+
+    if (result && result.success) {
+      state.rewards = result.rewards || [];
+      renderHistory();
+      renderWheel();
+    } else {
+      showToast("❌ Lỗi tải dữ liệu: " + (result?.message || "Không thể truy cập"));
+      state.rewards = [];
+      renderHistory();
+      renderWheel();
+    }
+
+    await loadStatus();
+  } catch (error) {
+    console.error("Load rewards error:", error);
+    showToast("❌ Lỗi kết nối server!");
+  }
+}
+
+document.getElementById("spinBtn").addEventListener("click", spin);
+
+// ============ QUẢN LÝ MODAL INFO ============
+function openInfoModal() {
+  document.getElementById("infoModal").classList.add("show");
+  renderRewardDetails();
+}
+
+function closeInfoModal() {
+  document.getElementById("infoModal").classList.remove("show");
+}
+
+function renderRewardDetails() {
+  const detailsDiv = document.getElementById("rewardDetails");
+
+  let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">';
+
+  PRIZES.forEach((prize, i) => {
+    html += `
+      <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <img src="${prize.icon}" alt="${prize.name}" style="width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px;"
+             onerror="this.outerHTML='<div style=&quot;width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 30px;&quot;>🎁</div>'">
+        <div style="font-weight: bold; font-size: 13px; color: #333;">${prize.name}</div>
+        <div style="color: #ff6b6b; font-weight: bold; font-size: 14px; margin-top: 5px;">x${prize.quantity}</div>
+      </div>
+    `;
+  });
+
+  html += '</div>';
+  detailsDiv.innerHTML = html;
+}
+
+// ============ QUẢN LÝ MODAL POP-UP XÁC NHẬN NHẬN QUÀ ============
+function openClaimModal(rewardId, btnEl) {
+  state.pendingClaimId = rewardId;
+  state.pendingClaimBtn = btnEl;
+  document.getElementById("claimModal").classList.add("show");
+}
+
+function closeClaimModal() {
+  state.pendingClaimId = null;
+  state.pendingClaimBtn = null;
+  document.getElementById("claimModal").classList.remove("show");
+}
+
+document.getElementById("btnConfirmClaim").addEventListener("click", async () => {
+  if (!state.pendingClaimId || !state.pendingClaimBtn) return;
+  
+  const rewardId = state.pendingClaimId;
+  const btnEl = state.pendingClaimBtn;
+
+  closeClaimModal();
+  await processClaimReward(rewardId, btnEl);
+});
+
+// Click ra ngoài để đóng Modal
+window.addEventListener("click", (event) => {
+  const infoModal = document.getElementById("infoModal");
+  const claimModal = document.getElementById("claimModal");
+
+  if (event.target === infoModal) {
+    closeInfoModal();
+  }
+  if (event.target === claimModal) {
+    closeClaimModal();
+  }
+});
+
+document.getElementById("infoBtn").addEventListener("click", openInfoModal);
+
+// ============ QUAY VÒNG ============
+async function spin() {
+  if (state.spinning) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    showToast("Vui lòng đăng nhập để quay!");
+    setTimeout(() => (window.location.href = "login.html"), 1200);
+    return;
+  }
+
+  if (state.nextSpinCost === null) {
+    showToast("❌ Bạn đã hết lượt quay!");
+    return;
+  }
+
+  if (!state.canSpin) {
+    showToast(`❌ Không đủ hồng ngọc! Lượt này cần ${state.nextSpinCost}, bạn đang có ${state.hongNgoc}.`);
+    return;
+  }
+
+  state.spinning = true;
+  document.getElementById("spinBtn").classList.add("disabled");
+
+  try {
+    const spinResult = await apiCall("/reward/spin", "POST", {});
+
+    // Nếu trả về lỗi (bao gồm lỗi chưa thoát game)
+    if (!spinResult || !spinResult.success) {
+      state.spinning = false;
+      document.getElementById("spinBtn").classList.remove("disabled");
+      showToast(spinResult?.message || "❌ Quay thất bại, vui lòng thử lại!");
+      if (spinResult?.currentHongNgoc !== undefined) {
+        state.hongNgoc = spinResult.currentHongNgoc;
+        renderCurrencyBar();
+      }
+      return;
+    }
+
+    const wheelIndex = spinResult.wheelIndex;
+    const selectedPrize = PRIZES[wheelIndex];
+
+    const step = 360 / PRIZES.length;
+    const targetCenterAngle = wheelIndex * step + step / 2;
+    const extraSpins = 5 + Math.floor(Math.random() * 3);
+    const finalRotation = state.currentRotation + extraSpins * 360 + (360 - targetCenterAngle) - (state.currentRotation % 360);
+
+    wheelEl.style.transform = `rotate(${finalRotation}deg)`;
+    state.currentRotation = finalRotation;
+
+    setTimeout(async () => {
+      state.spinning = false;
+      document.getElementById("spinBtn").classList.remove("disabled");
+
+      await loadRewards();
+      showToast(`🎉 Chúc mừng! Bạn trúng: ${selectedPrize.name} x${selectedPrize.quantity}`);
+    }, 4700);
+
+  } catch (error) {
+    console.error("Spin error:", error);
+    state.spinning = false;
+    document.getElementById("spinBtn").classList.remove("disabled");
+    showToast("❌ " + (error.message || "Lỗi kết nối server!"));
+  }
+}
+
+// ============ THỰC HIỆN GỬI API NHẬN THƯỞNG VÀO GAME ============
+async function processClaimReward(rewardId, btnEl) {
+  btnEl.disabled = true;
+  btnEl.textContent = "Đang xử lý...";
+
+  try {
+    const result = await apiCall("/reward/claim", "POST", {
+      rewardId: rewardId
+    });
+
+    if (result && result.success) {
+      await loadRewards();
+      showToast(result.message);
+    } else {
+      btnEl.disabled = false;
+      btnEl.textContent = "Nhận vào Game";
+      showToast(result?.message || "❌ Nhận thưởng thất bại!");
+    }
+  } catch (error) {
+    console.error("Claim error:", error);
+    btnEl.disabled = false;
+    btnEl.textContent = "Nhận vào Game";
+    showToast("❌ " + (error.message || "Lỗi kết nối server!"));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderWheel();
+  loadRewards();
+});
+
+window.addEventListener("storage", (e) => {
+  if (e.key === "token" || e.key === "user") {
+    loadRewards();
+  }
+});
+</script>
+
+</body>
+</html>
