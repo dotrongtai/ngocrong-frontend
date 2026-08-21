@@ -253,54 +253,6 @@
     border: 1px solid #f5c6cb;
   }
 
-  .giftcode-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f8f9fa;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px dashed #ced4da;
-  }
-
-  .giftcode-label {
-    font-size: 13px;
-    color: #495057;
-  }
-
-  .giftcode-text {
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    color: #d63384;
-    letter-spacing: 1px;
-    margin-left: 5px;
-    user-select: all;
-  }
-
-  .copy-btn {
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .copy-btn:hover {
-    background-color: #0b5ed7;
-  }
-
-  .copy-btn.copied {
-    background-color: #198754;
-  }
-
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -337,6 +289,30 @@
     </div>
 
     <button class="close-btn" onclick="closeInfoModal()">Đóng</button>
+  </div>
+</div>
+
+<!-- Modal Pop-up Hiển thị Mã Giftcode -->
+<div class="modal" id="codeModal">
+  <div class="modal-content" style="text-align: center;">
+    <h2 style="color: #28a745; margin-bottom: 10px;">🎉 NHẬN QUÀ THÀNH CÔNG</h2>
+    <p style="color: #555; font-size: 14px; margin-bottom: 20px;">
+      Vật phẩm của bạn đã được chuyển thành Giftcode. <br>
+      Hãy copy mã bên dưới và vào game nhập để nhận đồ nhé!
+    </p>
+    
+    <div style="background: #f8f9fa; border: 2px dashed #0d6efd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <span id="displayGiftCode" style="font-size: 24px; font-weight: bold; color: #d63384; font-family: monospace; letter-spacing: 2px; user-select: all;">
+        loading...
+      </span>
+    </div>
+    
+    <div class="modal-actions" style="justify-content: center; gap: 15px; display: flex;">
+      <button class="close-btn" onclick="closeCodeModal()" style="flex: none; padding: 12px 30px; margin-top: 0; width: auto; background-color: #6c757d;">Đóng</button>
+      <button id="btnCopyCodePopup" style="background: #0d6efd; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; flex: none; padding: 12px 30px; font-size: 14px; transition: background 0.2s;">
+        <i class="fas fa-copy"></i> Copy Mã Code
+      </button>
+    </div>
   </div>
 </div>
 
@@ -436,28 +412,38 @@ function renderWheel() {
   });
 }
 
-// ============ CHỨC NĂNG COPY GIFTCODE ============
-function copyToClipboard(text, btnElement) {
-  if (!text || text === 'undefined') {
-    showToast("❌ Không có mã code để copy!");
+// ============ QUẢN LÝ MODAL HIỂN THỊ CODE ============
+function openCodeModal(code) {
+  if (!code || code === 'undefined') {
+    showToast("❌ Mã code không hợp lệ hoặc đang xử lý!");
     return;
   }
-  navigator.clipboard.writeText(text).then(() => {
-    showToast("✅ Đã copy mã: " + text);
-    
-    // Hiệu ứng nút copy
-    const originalHTML = btnElement.innerHTML;
-    btnElement.innerHTML = `<i class="fas fa-check"></i> Đã Copy`;
-    btnElement.classList.add("copied");
-    
-    setTimeout(() => {
-      btnElement.innerHTML = originalHTML;
-      btnElement.classList.remove("copied");
-    }, 2000);
-  }).catch(err => {
-    console.error('Không thể copy', err);
-    showToast("❌ Lỗi trình duyệt, vui lòng copy thủ công!");
-  });
+  
+  // Hiển thị code
+  document.getElementById('displayGiftCode').textContent = code;
+  
+  // Khôi phục nút Copy về trạng thái ban đầu
+  const copyBtn = document.getElementById('btnCopyCodePopup');
+  copyBtn.innerHTML = `<i class="fas fa-copy"></i> Copy Mã Code`;
+  copyBtn.style.backgroundColor = "#0d6efd";
+
+  // Xử lý sự kiện bấm Copy
+  copyBtn.onclick = function() {
+    navigator.clipboard.writeText(code).then(() => {
+      showToast("✅ Đã copy mã: " + code);
+      this.innerHTML = `<i class="fas fa-check"></i> Đã Copy`;
+      this.style.backgroundColor = "#198754"; // Đổi màu xanh lá
+    }).catch(err => {
+      showToast("❌ Lỗi trình duyệt, vui lòng copy thủ công!");
+    });
+  };
+
+  // Hiển thị popup
+  document.getElementById("codeModal").classList.add("show");
+}
+
+function closeCodeModal() {
+  document.getElementById("codeModal").classList.remove("show");
 }
 
 // ============ RENDER LỊCH SỬ ============
@@ -477,13 +463,13 @@ function renderHistory() {
     
     const statusText = isClaimed ? "Đã sử dụng" : "Chưa sử dụng";
     const statusClass = isClaimed ? "status-claimed" : "status-unclaimed";
-    const giftCodeStr = reward.code || "Đang xử lý...";
+    const giftCodeStr = reward.code || "";
 
     const row = document.createElement("div");
     row.className = "history-item";
     
     row.innerHTML = `
-      <div class="history-item-top">
+      <div class="history-item-top" style="align-items: center;">
         <div class="history-item-info">
           <img src="${prize.icon}" alt="" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;"
                onerror="this.outerHTML='<div style=&quot;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;&quot;>🎁</div>'">
@@ -492,14 +478,12 @@ function renderHistory() {
             <div class="history-item-time">${new Date(reward.spin_time).toLocaleString("vi-VN")}</div>
           </div>
         </div>
-        <span class="status-badge ${statusClass}">${statusText}</span>
-      </div>
-      
-      <div class="giftcode-box">
-        <div class="giftcode-label">Code: <span class="giftcode-text">${giftCodeStr}</span></div>
-        <button class="copy-btn" onclick="copyToClipboard('${giftCodeStr}', this)">
-          <i class="fas fa-copy"></i> Copy Code
-        </button>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+          <span class="status-badge ${statusClass}">${statusText}</span>
+          <button onclick="openCodeModal('${giftCodeStr}')" style="background-color: ${isClaimed ? '#6c757d' : '#28a745'}; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: opacity 0.2s;">
+            <i class="fas fa-gift"></i> ${isClaimed ? 'Xem Lại Mã' : 'Nhận Quà Ngay'}
+          </button>
+        </div>
       </div>
     `;
     list.appendChild(row);
@@ -569,7 +553,6 @@ async function loadRewards() {
     }
     state.currentUser = user;
 
-    // Chỉ cần gọi /history là đủ lấy danh sách code và trạng thái
     const result = await apiCall("/reward/history", "GET");
 
     if (result && result.success) {
@@ -622,10 +605,16 @@ function renderRewardDetails() {
   detailsDiv.innerHTML = html;
 }
 
+// Bấm ra ngoài vùng tối để đóng Modal
 window.addEventListener("click", (event) => {
   const infoModal = document.getElementById("infoModal");
+  const codeModal = document.getElementById("codeModal");
+
   if (event.target === infoModal) {
     closeInfoModal();
+  }
+  if (event.target === codeModal) {
+    closeCodeModal();
   }
 });
 
@@ -685,9 +674,9 @@ async function spin() {
       document.getElementById("spinBtn").classList.remove("disabled");
 
       await loadRewards();
-      // Bật cửa sổ thông báo kết quả và tặng luôn mã code lên màn hình
-      if(spinResult.giftcode) {
-        prompt(`🎉 Chúc mừng bạn trúng ${selectedPrize.name} x${selectedPrize.quantity}!\nĐây là mã Code của bạn (vào game nhập):`, spinResult.giftcode);
+      // Bật cửa sổ thông báo kết quả mã code lên màn hình
+      if (spinResult.giftcode) {
+        openCodeModal(spinResult.giftcode);
       } else {
         showToast(`🎉 Chúc mừng! Bạn trúng: ${selectedPrize.name} x${selectedPrize.quantity}`);
       }
