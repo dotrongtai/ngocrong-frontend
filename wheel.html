@@ -195,63 +195,115 @@
     pointer-events: none;
   }
 
-  /* ========== TÙY CHỈNH STYLE LỊCH SỬ MỚI ========== */
+  /* ========== TÙY CHỈNH STYLE LỊCH SỬ MỚI CỰC KỲ ĐỀU NHAU ========== */
   .history-item {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
     padding: 15px;
     border-bottom: 1px solid #eee;
     background: #fff;
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-
-  .history-item-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .history-item-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
+    flex: 1; /* Dùng flex 1 để đẩy nhóm nút bấm sát sang lề phải */
+    text-align: left;
+  }
+
+  .history-item-img {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .history-item-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .history-item-text {
+    display: flex;
+    flex-direction: column;
   }
 
   .history-item-name {
     font-weight: bold;
     color: #3a1d63;
     font-size: 15px;
+    margin-bottom: 4px;
   }
 
   .history-item-time {
     font-size: 12px;
-    color: #6c757d;
-    margin-top: 2px;
+    color: #888;
+  }
+
+  .history-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 130px; /* Cố định width khung này để mọi hàng đều tăm tắp */
+    flex-shrink: 0;
   }
 
   .status-badge {
     font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 12px;
+    padding: 5px 0;
+    border-radius: 4px;
     font-weight: bold;
     text-transform: uppercase;
-    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .status-unclaimed {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
   }
 
   .status-claimed {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: #f1f3f5;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
   }
+
+  .action-btn {
+    width: 100%; /* Trải dài bằng khung 130px */
+    color: white;
+    border: none;
+    padding: 8px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: opacity 0.2s, background-color 0.2s;
+  }
+
+  .action-btn:hover {
+    opacity: 0.9;
+  }
+
+  .action-btn-primary { background-color: #28a745; }
+  .action-btn-secondary { background-color: #6c757d; }
 
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -419,26 +471,22 @@ function openCodeModal(code) {
     return;
   }
   
-  // Hiển thị code
   document.getElementById('displayGiftCode').textContent = code;
   
-  // Khôi phục nút Copy về trạng thái ban đầu
   const copyBtn = document.getElementById('btnCopyCodePopup');
   copyBtn.innerHTML = `<i class="fas fa-copy"></i> Copy Mã Code`;
   copyBtn.style.backgroundColor = "#0d6efd";
 
-  // Xử lý sự kiện bấm Copy
   copyBtn.onclick = function() {
     navigator.clipboard.writeText(code).then(() => {
       showToast("✅ Đã copy mã: " + code);
       this.innerHTML = `<i class="fas fa-check"></i> Đã Copy`;
-      this.style.backgroundColor = "#198754"; // Đổi màu xanh lá
+      this.style.backgroundColor = "#198754";
     }).catch(err => {
       showToast("❌ Lỗi trình duyệt, vui lòng copy thủ công!");
     });
   };
 
-  // Hiển thị popup
   document.getElementById("codeModal").classList.add("show");
 }
 
@@ -446,7 +494,7 @@ function closeCodeModal() {
   document.getElementById("codeModal").classList.remove("show");
 }
 
-// ============ RENDER LỊCH SỬ ============
+// ============ RENDER LỊCH SỬ THẲNG HÀNG ============
 function renderHistory() {
   const list = document.getElementById("historyList");
 
@@ -461,29 +509,30 @@ function renderHistory() {
     const prize = PRIZES[reward.wheel_index] || PRIZES.find(p => p.id === reward.item_id) || { name: 'Quà', quantity: 1, icon: 'assets/images/items/ngoc-500.png' };
     const isClaimed = reward.status === "claimed";
     
-    const statusText = isClaimed ? "Đã sử dụng" : "Chưa sử dụng";
+    const statusText = isClaimed ? "Đã Sử Dụng" : "Chưa Sử Dụng";
     const statusClass = isClaimed ? "status-claimed" : "status-unclaimed";
+    const btnClass = isClaimed ? "action-btn-secondary" : "action-btn-primary";
     const giftCodeStr = reward.code || "";
 
     const row = document.createElement("div");
     row.className = "history-item";
     
     row.innerHTML = `
-      <div class="history-item-top" style="align-items: center;">
-        <div class="history-item-info">
-          <img src="${prize.icon}" alt="" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;"
-               onerror="this.outerHTML='<div style=&quot;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;&quot;>🎁</div>'">
-          <div>
-            <div class="history-item-name">${prize.name} x${prize.quantity}</div>
-            <div class="history-item-time">${new Date(reward.spin_time).toLocaleString("vi-VN")}</div>
-          </div>
+      <div class="history-item-info">
+        <div class="history-item-img">
+          <img src="${prize.icon}" alt="Icon" onerror="this.outerHTML='<div style=&quot;font-size:24px;&quot;>🎁</div>'">
         </div>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
-          <span class="status-badge ${statusClass}">${statusText}</span>
-          <button onclick="openCodeModal('${giftCodeStr}')" style="background-color: ${isClaimed ? '#6c757d' : '#28a745'}; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: opacity 0.2s;">
-            <i class="fas fa-gift"></i> ${isClaimed ? 'Xem Lại Mã' : 'Nhận Quà Ngay'}
-          </button>
+        <div class="history-item-text">
+          <div class="history-item-name">${prize.name} x${prize.quantity}</div>
+          <div class="history-item-time">${new Date(reward.spin_time).toLocaleString("vi-VN")}</div>
         </div>
+      </div>
+      
+      <div class="history-item-actions">
+        <span class="status-badge ${statusClass}">${statusText}</span>
+        <button onclick="openCodeModal('${giftCodeStr}')" class="action-btn ${btnClass}">
+          <i class="fas fa-gift"></i> ${isClaimed ? 'Xem Lại Mã' : 'Nhận Quà Ngay'}
+        </button>
       </div>
     `;
     list.appendChild(row);
@@ -587,7 +636,6 @@ function closeInfoModal() {
 
 function renderRewardDetails() {
   const detailsDiv = document.getElementById("rewardDetails");
-
   let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">';
 
   PRIZES.forEach((prize, i) => {
@@ -605,17 +653,12 @@ function renderRewardDetails() {
   detailsDiv.innerHTML = html;
 }
 
-// Bấm ra ngoài vùng tối để đóng Modal
 window.addEventListener("click", (event) => {
   const infoModal = document.getElementById("infoModal");
   const codeModal = document.getElementById("codeModal");
 
-  if (event.target === infoModal) {
-    closeInfoModal();
-  }
-  if (event.target === codeModal) {
-    closeCodeModal();
-  }
+  if (event.target === infoModal) closeInfoModal();
+  if (event.target === codeModal) closeCodeModal();
 });
 
 document.getElementById("infoBtn").addEventListener("click", openInfoModal);
@@ -674,7 +717,6 @@ async function spin() {
       document.getElementById("spinBtn").classList.remove("disabled");
 
       await loadRewards();
-      // Bật cửa sổ thông báo kết quả mã code lên màn hình
       if (spinResult.giftcode) {
         openCodeModal(spinResult.giftcode);
       } else {
