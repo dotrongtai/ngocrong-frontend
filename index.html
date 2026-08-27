@@ -6,6 +6,7 @@
   <title>Ngọc Rồng Hoa Mai - Huyền Thoại Trở Lại</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
 </head>
 <body>
 
@@ -31,11 +32,24 @@
         <p>Tham gia ngay thế giới Ngọc Rồng trực tuyến đông vui nhất, nhiều sự kiện hấp dẫn và quà tặng tân thủ cực khủng!</p>
         <div class="hero-actions">
           <a href="#downloadSection" class="btn-glow btn-download-large"><i class="fa-solid fa-gift"></i> Sự kiện</a>
-          <a href="#zaloSection" class="btn-glow btn-zalo-large"><i class="fa-solid fa-comments"></i> Diễn Đàn</a>
+          <a href="dien-dan.html" class="btn-glow btn-zalo-large"><i class="fa-solid fa-comments"></i> Diễn Đàn</a>
         </div>
       </div>
 
-      <div class="features-grid">
+      <!-- ============ TIN MỚI NHẤT ============ -->
+      <section class="news-section" id="forumSection">
+        <div class="news-head">
+          <h2><i class="fa-solid fa-newspaper"></i> Tin Mới Nhất</h2>
+          <a href="dien-dan.html" style="color:var(--vang); text-decoration:none; font-weight:600; white-space:nowrap;">
+            Xem tất cả <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="news-list" id="newsList">
+          <div class="news-empty">Đang tải bài đăng...</div>
+        </div>
+      </section>
+
+      <div class="features-grid" style="margin-top:45px;">
         <div class="feature-card" id="downloadSection">
           <h3><i class="fa-solid fa-download"></i> Tải Game Đa Nền Tảng</h3>
           <p>Hỗ trợ đầy đủ các hệ điều hành mượt mà, không giật lag.</p>
@@ -56,6 +70,20 @@
           <p>Hệ thống nạp tiền không chiết khấu nhận ngay tài khoản không phải chờ đợi!</p>
           <a href="topup.html" class="btn-secondary" style="text-decoration:none; display:inline-block; text-align:center;"><i class="fa-solid fa-coins"></i> Nạp Thẻ Ngay</a>
         </div>
+      </div>
+    </div>
+
+    <!-- Modal đọc bài đăng -->
+    <div id="postModal" class="modal">
+      <div class="modal-content post-modal-content">
+        <span class="close" onclick="dongBaiDang()">&times;</span>
+        <h2 id="postModalTitle"></h2>
+        <div class="post-meta" style="margin-bottom:16px;">
+          <span id="postModalTag" class="post-tag"></span>
+          <span id="postModalDate"></span>
+        </div>
+        <div class="post-modal-body" id="postModalBody"></div>
+        <div id="postModalActions" style="margin-top:20px;"></div>
       </div>
     </div>
 
@@ -86,58 +114,64 @@
     </div>
   </div>
 
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const splashScreen = document.getElementById("splashScreen");
-        if (sessionStorage.getItem("hasLoadedSplash")) {
-      if (splashScreen) {
-        splashScreen.style.display = "none";
-      }
-    } else {
-      sessionStorage.setItem("hasLoadedSplash", "true");
-      let progress = 0;
-      const loaderBar = document.getElementById("loaderBar");
-      const loaderText = document.getElementById("loaderText");
-      const interval = setInterval(() => {
-        progress += 2;
-        if (loaderBar) loaderBar.style.width = progress + "%";
-        if (loaderText) loaderText.innerText = `Đang tải dữ liệu... (${progress}%)`;
-        if (progress >= 100) {
-          clearInterval(interval);
-          if (splashScreen) {
-            splashScreen.style.opacity = "0";
-            setTimeout(() => {
-              splashScreen.style.display = "none";
-            }, 800);
-          }
+<script>
+/* ---------- splash + hoa mai ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const splashScreen = document.getElementById("splashScreen");
+  if (sessionStorage.getItem("hasLoadedSplash")) {
+    if (splashScreen) {
+      splashScreen.style.display = "none";
+    }
+  } else {
+    sessionStorage.setItem("hasLoadedSplash", "true");
+    let progress = 0;
+    const loaderBar = document.getElementById("loaderBar");
+    const loaderText = document.getElementById("loaderText");
+    const interval = setInterval(() => {
+      progress += 2;
+      if (loaderBar) loaderBar.style.width = progress + "%";
+      if (loaderText) loaderText.innerText = `Đang tải dữ liệu... (${progress}%)`;
+      if (progress >= 100) {
+        clearInterval(interval);
+        if (splashScreen) {
+          splashScreen.style.opacity = "0";
+          setTimeout(() => {
+            splashScreen.style.display = "none";
+          }, 800);
         }
-      }, 20);
-    }
-    createApricotFlowers("apricotContainer");
-    createApricotFlowers("mainApricotContainer");
-  });
-  function createApricotFlowers(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    const flowerCount = 25;
-    for (let i = 0; i < flowerCount; i++) {
-      const flower = document.createElement("div");
-      flower.classList.add("apricot-flower");
-      flower.style.left = Math.random() * 100 + "vw";
-      flower.style.animationDuration = (Math.random() * 3 + 4) + "s"; 
-      flower.style.animationDelay = (Math.random() * 5) + "s";
-      flower.style.transform = `scale(${Math.random() * 0.6 + 0.6})`;
-      container.appendChild(flower);
-    }
+      }
+    }, 20);
   }
+  createApricotFlowers("apricotContainer");
+  createApricotFlowers("mainApricotContainer");
+  veBaiDang("newsList", 3);
+});
 
-  function openModal(modalId) {
-    document.getElementById(modalId).style.display = "flex";
+function createApricotFlowers(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const flowerCount = 25;
+  for (let i = 0; i < flowerCount; i++) {
+    const flower = document.createElement("div");
+    flower.classList.add("apricot-flower");
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.animationDuration = (Math.random() * 3 + 4) + "s";
+    flower.style.animationDelay = (Math.random() * 5) + "s";
+    flower.style.transform = `scale(${Math.random() * 0.6 + 0.6})`;
+    container.appendChild(flower);
   }
-  function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
-  }
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = "flex";
+}
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
 </script>
+
+  <script src="js/posts.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/security.js"></script>

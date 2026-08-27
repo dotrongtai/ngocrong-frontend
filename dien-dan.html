@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diễn Đàn - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+</head>
+<body>
+
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+
+      <div class="hero-banner" style="padding:34px 20px;">
+        <h2><i class="fa-solid fa-newspaper"></i> DIỄN ĐÀN</h2>
+        <p>Tin tức, sự kiện và thông báo bảo trì từ Ban Quản Trị.</p>
+      </div>
+
+      <section class="news-section" style="margin-top:10px;">
+        <div class="news-head">
+          <h2>Tất cả bài đăng</h2>
+        </div>
+        <div class="news-list" id="newsList">
+          <div class="news-empty">Đang tải bài đăng...</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Hộp đọc bài -->
+    <div id="postModal" class="modal">
+      <div class="modal-content post-modal-content">
+        <span class="close" onclick="dongBaiDang()">&times;</span>
+        <h2 id="postModalTitle"></h2>
+        <div class="post-meta" style="margin-bottom:16px;">
+          <span id="postModalTag" class="post-tag"></span>
+          <span id="postModalDate"></span>
+        </div>
+        <div class="post-modal-body" id="postModalBody"></div>
+        <div id="postModalActions" style="margin-top:20px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/posts.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      veBaiDang("newsList");
+      taoHoaMai("mainApricotContainer");
+
+      /* mở thẳng một bài qua link dạng dien-dan.html#bai=trung-thu-2026 */
+      var m = location.hash.match(/bai=([\w-]+)/);
+      if (m) moBaiDang(m[1]);
+    });
+
+    function taoHoaMai(id) {
+      var khung = document.getElementById(id);
+      if (!khung) return;
+      for (var i = 0; i < 18; i++) {
+        var hoa = document.createElement("div");
+        hoa.className = "apricot-flower";
+        hoa.style.left = Math.random() * 100 + "vw";
+        hoa.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        hoa.style.animationDelay = (Math.random() * 5) + "s";
+        hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
+        khung.appendChild(hoa);
+      }
+    }
+  </script>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
