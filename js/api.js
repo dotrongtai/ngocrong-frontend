@@ -1,7 +1,6 @@
 
 window.API_BASE_URL = window.API_BASE_URL
-  || "https://ngocrong-backend-production.up.railway.app/api";
-
+  || "https://ngocrong-backend.vercel.app/api";
 async function apiCall(endpoint, method = 'GET', data = null) {
   try {
     const config = {

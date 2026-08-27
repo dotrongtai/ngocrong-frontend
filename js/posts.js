@@ -1,15 +1,62 @@
+/* ==========================================================
+   posts.js — dữ liệu bài đăng dùng chung
+   Nạp ở cả index.html và dien-dan.html:
+       <script src="js/posts.js"></script>
+
+   THÊM BÀI MỚI: chèn object vào ĐẦU mảng BAI_DANG.
+     id       : chuỗi không dấu, không trùng — dùng cho link trực tiếp
+     icon     : emoji hiện bên trái
+     tieuDe   : tiêu đề bài
+     tomTat   : mô tả ngắn hiện ở danh sách
+     tag      : nhãn hiển thị
+     tagClass : "" (cam - sự kiện) | "tag-tin" (xanh) | "tag-bao-tri" (xám)
+     ngay     : "YYYY-MM-DD"
+     ghim     : true để luôn nằm trên cùng
+     lien     : có giá trị -> bấm vào chuyển sang trang đó
+                để trống -> mở hộp đọc bài ngay tại chỗ
+     noi      : nội dung HTML hiện trong hộp đọc bài
+   ========================================================== */
 
 const BAI_DANG = [
+  {
+    id: "co-che-trong-game",
+    icon: "⚙️",
+    tieuDe: "Cơ Chế Trong Game — Những Điều Cần Biết",
+    tomTat: "Nhập giftcode ở đâu, cày chay lên vàng thế nào, các mốc đua top và cách nhận set kích hoạt miễn phí.",
+    tag: "Tin tức",
+    tagClass: "tag-tin",
+    ngay: "2026-08-27",
+    ghim: false,
+    lien: "coche.html",
+    noi: `
+      <p><strong>Giftcode.</strong> Nhập tại NPC Santa — dùng được cả giftcode trong game
+      và giftcode nhận từ Vòng Quay May Mắn trên web.</p>
+
+      <p><strong>Cày chay lên vàng.</strong> Server không chặn cày chay. Ngọc và vàng thoải mái,
+      không cần nạp vẫn lên được.</p>
+
+      <p><strong>Set kích hoạt M miễn phí.</strong> Lên 3 map đầu của cả 3 hành tinh là nhận được.</p>
+
+      <p><strong>Đua top sự kiện.</strong> Reset 7 ngày một lần, phần thưởng là capsule kích hoạt.
+      Ngoài ra còn các bảng đua top sức mạnh, top nạp và top nhiệm vụ.</p>
+
+      <p><strong>Săn boss tích điểm.</strong> Hạ boss để tích điểm rồi mang đi đổi quà.</p>
+
+      <p><strong>Nội dung nhóm.</strong> Ngọc Rồng Sao Đen và hệ thống bang hội đều đã mở.</p>
+
+      <p><strong>Sự kiện Trung Thu</strong> đang diễn ra — đốt lồng đèn hoa đăng và săn Khỉ Đột.</p>
+    `
+  },
   {
     id: "trung-thu-2026",
     icon: "🏮",
     tieuDe: "Sự Kiện Trung Thu — Đốt Lồng Đèn & Săn Khỉ Đột",
-    tomTat: "Vui Tết Trung Thu với Ngọc Rồng Hoa Mai.",
+    tomTat: "Gom Diêm và Dầu thắp đèn hoa đăng nhận quà, dùng Mặt trăng gọi Khỉ Đột lấy Đuôi khỉ x2 kinh nghiệm.",
     tag: "Sự kiện",
     tagClass: "",
     ngay: "2026-08-27",
     ghim: true,
-    lien: "trungthu.html",
+    lien: "trung-thu.html",
     noi: `
       <p>Rằm tháng Tám đã về với <strong>Ngọc Rồng Hoa Mai</strong>. Mùa này có hai việc đáng làm.</p>
       <p><strong>Đốt lồng đèn hoa đăng.</strong> Săn boss để nhặt Diêm, đánh quái để nhặt Dầu.

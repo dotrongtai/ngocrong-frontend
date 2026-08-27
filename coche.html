@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cơ Chế Trong Game - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+
+  <style>
+    /* ---- lưới cơ chế ---- */
+    .co-che-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .cc-card {
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      border-left: 4px solid var(--vang);
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 8px 24px var(--bong-nhe);
+      transition: .25s;
+    }
+    .cc-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--vang);
+      box-shadow: 0 14px 32px var(--bong-nhe),
+                  0 0 22px rgba(255, 204, 0, calc(.18 * var(--hao-quang)));
+    }
+
+    .cc-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 12px;
+    }
+
+    .cc-icon {
+      flex: none;
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 23px;
+      background: rgba(255, 204, 0, .14);
+      border: 1px solid var(--vien);
+    }
+
+    .cc-card h3 {
+      font-size: 17.5px;
+      font-weight: 800;
+      color: var(--vang);
+      line-height: 1.3;
+    }
+
+    .cc-card p {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--chu-mo);
+      margin-bottom: 10px;
+    }
+    .cc-card p:last-child { margin-bottom: 0; }
+    .cc-card strong { color: var(--chu); }
+
+    .cc-list { margin: 0 0 0 18px; }
+    .cc-list li {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--chu-mo);
+      margin-bottom: 7px;
+    }
+    .cc-list li:last-child { margin-bottom: 0; }
+    .cc-list strong { color: var(--chu); }
+
+    .cc-note {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--chu-mo);
+      margin-top: 12px;
+      padding-left: 13px;
+      border-left: 2px solid var(--cam);
+    }
+
+    /* thẻ trải ngang toàn hàng */
+    .cc-card.rong { grid-column: 1 / -1; }
+
+    .cc-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 620px) {
+      .cc-card { padding: 18px; }
+      .cc-card h3 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+
+      <div class="hero-banner" style="padding:34px 20px;">
+        <h2><i class="fa-solid fa-gears"></i> CƠ CHẾ TRONG GAME</h2>
+        <p>Những điều cần biết trước khi bắt đầu hành trình ở Ngọc Rồng Hoa Mai.</p>
+      </div>
+
+      <section class="news-section" style="margin-top:10px;">
+        <div class="news-head">
+          <h2>Tổng quan</h2>
+        </div>
+
+        <div class="co-che-grid">
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">🎁</div>
+              <h3>Giftcode</h3>
+            </div>
+            <p>Nhập tại NPC <strong>Santa</strong> trong game.</p>
+            <ul class="cc-list">
+              <li>Giftcode phát trong game và trên Zalo</li>
+              <li>Giftcode nhận từ <strong>Vòng Quay May Mắn</strong> trên web</li>
+            </ul>
+            <p class="cc-note">Quay vòng quay xong, copy mã rồi vào game gặp Santa nhập là nhận đồ ngay.</p>
+          </div>
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">⛏️</div>
+              <h3>Cày chay lên vàng</h3>
+            </div>
+            <p>Server không chặn cày chay. Không nạp một đồng vẫn lên được top.</p>
+            <ul class="cc-list">
+              <li>Ngọc <strong>free</strong>, vàng up thoải mái</li>
+              <li>Không giới hạn thời gian cày</li>
+            </ul>
+          </div>
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">🧬</div>
+              <h3>Set kích hoạt M miễn phí</h3>
+            </div>
+            <p>Farm <strong>3 map đầu của cả 3 hành tinh</strong> là nhận được set kích hoạt M.</p>
+            <p class="cc-note">Làm ngay từ khi mới vào game, không cần chờ sự kiện.</p>
+          </div>
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">🏆</div>
+              <h3>Đua top</h3>
+            </div>
+            <ul class="cc-list">
+              <li><strong>Top sự kiện</strong> — reset 7 ngày một lần, thưởng capsule kích hoạt</li>
+              <li><strong>Top sức mạnh</strong></li>
+              <li><strong>Top nạp</strong></li>
+              <li><strong>Top nhiệm vụ</strong></li>
+            </ul>
+          </div>
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">👹</div>
+              <h3>Săn boss tích điểm</h3>
+            </div>
+            <p>Hạ boss để tích điểm, mang điểm đi <strong>đổi quà</strong>.</p>
+            <p class="cc-note">Boss sẽ rơi Diêm dùng cho sự kiện Trung Thu.</p>
+          </div>
+
+          <div class="cc-card">
+            <div class="cc-top">
+              <div class="cc-icon">🐉</div>
+              <h3>Hoạt động bang hội</h3>
+            </div>
+            <ul class="cc-list">
+              <li><strong>Ngọc Rồng Sao Đen</strong></li>
+              <li><strong>Bang hội</strong> — cùng làm phó bản, đua top bang</li>
+            </ul>
+          </div>
+
+          <div class="cc-card rong" style="border-left-color: var(--cam);">
+            <div class="cc-top">
+              <div class="cc-icon">🏮</div>
+              <h3>Sự kiện Trung Thu đang diễn ra</h3>
+            </div>
+            <p>Đốt lồng đèn hoa đăng nhận quà ngẫu nhiên, dùng Mặt trăng gọi Khỉ Đột
+            lấy Đuôi khỉ để nhân đôi kinh nghiệm. Thi thoảng trăng hoá đỏ — đó là lúc
+            <strong>Khỉ Đột Vương</strong> xuống núi.</p>
+            <div class="cc-cta">
+              <a href="trung-thu.html" class="btn-secondary" style="text-decoration:none; display:inline-block;">
+                <i class="fa-solid fa-moon"></i> Xem chi tiết sự kiện
+              </a>
+              <a href="dien-dan.html" class="btn-store" style="text-decoration:none; display:inline-block; padding:10px 20px;">
+                <i class="fa-solid fa-newspaper"></i> Về diễn đàn
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var khung = document.getElementById("mainApricotContainer");
+      if (!khung) return;
+      for (var i = 0; i < 18; i++) {
+        var hoa = document.createElement("div");
+        hoa.className = "apricot-flower";
+        hoa.style.left = Math.random() * 100 + "vw";
+        hoa.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        hoa.style.animationDelay = (Math.random() * 5) + "s";
+        hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
+        khung.appendChild(hoa);
+      }
+    });
+  </script>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
