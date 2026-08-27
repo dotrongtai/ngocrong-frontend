@@ -56,7 +56,7 @@ const BAI_DANG = [
     tagClass: "",
     ngay: "2026-08-27",
     ghim: true,
-    lien: "trung-thu.html",
+    lien: "trungthu.html",
     noi: `
       <p>Rằm tháng Tám đã về với <strong>Ngọc Rồng Hoa Mai</strong>. Mùa này có hai việc đáng làm.</p>
       <p><strong>Đốt lồng đèn hoa đăng.</strong> Săn boss để nhặt Diêm, đánh quái để nhặt Dầu.
