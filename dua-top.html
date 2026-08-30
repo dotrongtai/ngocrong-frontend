@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đua Top Khai Mở - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+
+  <style>
+    /* ---- đồng hồ đếm ngược ---- */
+    .dem-nguoc {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    .dem-o {
+      min-width: 82px;
+      padding: 14px 10px;
+      border-radius: 14px;
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      text-align: center;
+    }
+    .dem-so {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--vang);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .dem-chu {
+      font-size: 12px;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--chu-mo);
+      margin-top: 4px;
+    }
+    .dem-trang-thai {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--chu-mo);
+    }
+
+    /* ---- mốc thời gian ---- */
+    .moc-tg {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .moc-o {
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      border-left: 4px solid var(--vang);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .moc-nhan {
+      font-size: 12px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      color: var(--chu-mo);
+      margin-bottom: 5px;
+    }
+    .moc-noi {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--vang);
+    }
+
+    /* ---- bảng đua top ---- */
+    .bang-top {
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px var(--bong-nhe);
+    }
+    .bang-top h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--vang);
+      margin-bottom: 4px;
+    }
+    .bang-top .mo-ta {
+      font-size: 13.5px;
+      color: var(--chu-mo);
+      margin-bottom: 18px;
+    }
+
+    .hang {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-top: 1px dashed var(--vien-mo);
+    }
+    .hang:first-of-type { border-top: none; }
+
+    .hang-so {
+      flex: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--nut-2-chu);
+      background: linear-gradient(135deg, #9aa3ad, #6c757d);
+    }
+    .hang-so.h1 { background: linear-gradient(135deg, #FFD34D, #E0A800); }
+    .hang-so.h2 { background: linear-gradient(135deg, #D7DDE4, #9AA5B1); }
+    .hang-so.h3 { background: linear-gradient(135deg, #E2A163, #B26B2C); }
+    .hang-so.hkhac { font-size: 13px; }
+
+    .hang-qua {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .qua-o {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 8px 8px;
+      border-radius: 12px;
+      background: var(--vien-nen);
+      border: 1px solid var(--vien);
+      transition: .2s;
+    }
+    .qua-o:hover {
+      border-color: var(--vang);
+      transform: translateY(-2px);
+    }
+
+    .qua-anh {
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 204, 0, .12);
+      overflow: hidden;
+    }
+    .qua-anh img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .qua-anh .thay-the { font-size: 19px; }
+
+    .qua-chu {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+    .qua-ten {
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .qua-sl {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--vang);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .qua-o.noi-bat {
+      border-color: var(--vang);
+      background: rgba(255, 204, 0, .1);
+    }
+    .qua-o.noi-bat .qua-ten { color: var(--vang); }
+
+    /* nhóm item cấp 2: 4 ảnh nhỏ xếp lưới trong một ô */
+    .qua-anh.gop {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      padding: 2px;
+    }
+    .qua-anh.gop img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .ghi-chu-cuoi {
+      margin-top: 30px;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 102, 0, .18), var(--the-nen));
+      border: 1px solid var(--vien-dam);
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    @media (max-width: 620px) {
+      .bang-top { padding: 18px; }
+      .hang { gap: 12px; }
+      .hang-so { width: 38px; height: 38px; font-size: 15px; }
+      .dem-o { min-width: 68px; padding: 11px 8px; }
+      .dem-so { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+
+      <div class="hero-banner" style="padding:34px 20px;">
+        <h2><i class="fa-solid fa-trophy"></i> ĐUA TOP KHAI MỞ</h2>
+        <p>Máy chủ mở cửa lúc <strong>20:30 ngày 31/08</strong>. Đua top kéo dài 7 ngày, chốt giải và trao thưởng ngay sau đó.</p>
+
+        <div class="dem-nguoc" id="demNguoc">
+          <div class="dem-o"><div class="dem-so" id="dNgay">--</div><div class="dem-chu">Ngày</div></div>
+          <div class="dem-o"><div class="dem-so" id="dGio">--</div><div class="dem-chu">Giờ</div></div>
+          <div class="dem-o"><div class="dem-so" id="dPhut">--</div><div class="dem-chu">Phút</div></div>
+          <div class="dem-o"><div class="dem-so" id="dGiay">--</div><div class="dem-chu">Giây</div></div>
+        </div>
+        <div class="dem-trang-thai" id="demTrangThai">Đang tính thời gian...</div>
+      </div>
+
+      <div class="moc-tg">
+        <div class="moc-o">
+          <div class="moc-nhan">Khai mở máy chủ</div>
+          <div class="moc-noi">20:30 — 31/08</div>
+        </div>
+        <div class="moc-o">
+          <div class="moc-nhan">Thời gian đua top</div>
+          <div class="moc-noi">7 ngày liên tục</div>
+        </div>
+        <div class="moc-o">
+          <div class="moc-nhan">Chốt giải &amp; trao thưởng</div>
+          <div class="moc-noi">20:30 — 07/09</div>
+        </div>
+      </div>
+
+      <!-- ============ TOP SỨC MẠNH ============ -->
+      <div class="news-section" style="margin-top:34px;">
+        <div class="news-head"><h2><i class="fa-solid fa-fire"></i> Đua Top Sức Mạnh</h2></div>
+
+        <div class="bang-top">
+          <h3>Phần thưởng</h3>
+          <p class="mo-ta">Xếp theo tổng sức mạnh nhân vật tại thời điểm chốt.</p>
+
+          <div class="hang">
+            <div class="hang-so h1">1</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x250</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hồng ngọc</span><span class="qua-sl">x400</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x30</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x30</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/capsuleskhtuchon.png" alt="Hộp chọn SKH bất kỳ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hộp chọn SKH bất kỳ</span><span class="qua-sl">x1</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/goku.png" alt="CT Songoku Instinct Goku" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">CT Songoku Instinct Goku</span><span class="qua-sl">45 ngày</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/tulinhvu.png" alt="Cánh Tử Linh Vũ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Cánh Tử Linh Vũ</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h2">2</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x150</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hồng ngọc</span><span class="qua-sl">x300</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x20</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x20</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/meothantai.png" alt="Mèo thần tài" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Mèo thần tài</span><span class="qua-sl">60 ngày</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h3">3</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x70</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x10</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x10</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/meothantai.png" alt="Mèo thần tài" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Mèo thần tài</span><span class="qua-sl">15 ngày</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so hkhac">4-10</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x30</span></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TOP NẠP ============ -->
+      <div class="news-section">
+        <div class="news-head"><h2><i class="fa-solid fa-gem"></i> Đua Top Nạp</h2></div>
+
+        <div class="bang-top">
+          <h3>Phần thưởng</h3>
+          <p class="mo-ta">Xếp theo tổng số tiền nạp tích lũy trong 7 ngày đua top.</p>
+
+          <div class="hang">
+            <div class="hang-so h1">1</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x350</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hồng ngọc</span><span class="qua-sl">x1000</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x50</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/goku.png" alt="CT Ultra Instinct Goku" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">CT Ultra Instinct Goku</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/capsuleskhtuchon.png" alt="Hộp chọn SKH bất kỳ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hộp chọn SKH bất kỳ</span><span class="qua-sl">x1</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/venhiemvu.png" alt="Vé nhiệm vụ KOL" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Vé nhiệm vụ KOL</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/canhthienthan.png" alt="Cánh thiên thần" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Cánh thiên thần</span><span class="qua-sl">60 ngày</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/hopquathanlinh.png" alt="Món thần linh tự chọn" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Món thần linh tự chọn</span><span class="qua-sl">x2</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h2">2</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x250</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hồng ngọc</span><span class="qua-sl">x700</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x30</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/capsuleskhtuchon.png" alt="Hộp SKH random theo hành tinh" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hộp SKH random theo hành tinh</span><span class="qua-sl">x1</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/trungxennhi.png" alt="Trứng xên nhí" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Trứng xên nhí</span><span class="qua-sl">x1</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/mabugymer.png" alt="Mabu Gymmer" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Mabu Gymmer</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hopquathanlinh.png" alt="Món thần linh random" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Món thần linh random</span><span class="qua-sl">x2</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/venhiemvu.png" alt="Vé nhiệm vụ KOL" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Vé nhiệm vụ KOL</span><span class="qua-sl">15 ngày</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h3">3</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x200</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Hồng ngọc</span><span class="qua-sl">x500</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x20</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/meothantai.png" alt="Mèo thần tài" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Mèo thần tài</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/venhiemvu.png" alt="Vé nhiệm vụ KOL" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Vé nhiệm vụ KOL</span><span class="qua-sl">7 ngày</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/hopquathanlinh.png" alt="Món thần linh random" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Món thần linh random</span><span class="qua-sl">x1</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so hkhac">4-10</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x50</span></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TOP NHIỆM VỤ ============ -->
+      <div class="news-section">
+        <div class="news-head"><h2><i class="fa-solid fa-scroll"></i> Đua Top Nhiệm Vụ</h2></div>
+
+        <div class="bang-top">
+          <h3>Phần thưởng</h3>
+          <p class="mo-ta">Xếp theo số nhiệm vụ hoàn thành trong 7 ngày đua top.</p>
+
+          <div class="hang">
+            <div class="hang-so h1">1</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x200</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x20</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x10</span></span></span>
+              <span class="qua-o"><span class="qua-anh gop"><img src="assets/images/prizes/bohuyet2.png" alt=""><img src="assets/images/prizes/cuongno2.png" alt=""><img src="assets/images/prizes/giapxen2.png" alt=""><img src="assets/images/prizes/bokhi2.png" alt=""></span><span class="qua-chu"><span class="qua-ten">Item cấp 2</span><span class="qua-sl">x20</span></span></span>
+              <span class="qua-o noi-bat"><span class="qua-anh"><img src="assets/images/prizes/phuonghoanglua.png" alt="Ván bay Hoả Chim Ưng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Ván bay Hoả Chim Ưng</span><span class="qua-sl">Vĩnh viễn</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h2">2</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x150</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x15</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x5</span></span></span>
+              <span class="qua-o"><span class="qua-anh gop"><img src="assets/images/prizes/bohuyet2.png" alt=""><img src="assets/images/prizes/cuongno2.png" alt=""><img src="assets/images/prizes/giapxen2.png" alt=""><img src="assets/images/prizes/bokhi2.png" alt=""></span><span class="qua-chu"><span class="qua-ten">Item cấp 2</span><span class="qua-sl">x10</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so h3">3</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x100</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/dabaove.png" alt="Đá bảo vệ" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Đá bảo vệ</span><span class="qua-sl">x10</span></span></span>
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/3sao.png" alt="Bộ ngọc rồng 3 sao" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Bộ ngọc rồng 3 sao</span><span class="qua-sl">x3</span></span></span>
+              <span class="qua-o"><span class="qua-anh gop"><img src="assets/images/prizes/bohuyet2.png" alt=""><img src="assets/images/prizes/cuongno2.png" alt=""><img src="assets/images/prizes/giapxen2.png" alt=""><img src="assets/images/prizes/bokhi2.png" alt=""></span><span class="qua-chu"><span class="qua-ten">Item cấp 2</span><span class="qua-sl">x10</span></span></span>
+            </div>
+          </div>
+
+          <div class="hang">
+            <div class="hang-so hkhac">4-10</div>
+            <div class="hang-qua">
+              <span class="qua-o"><span class="qua-anh"><img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" onerror="this.parentNode.innerHTML='<span class=&quot;thay-the&quot;>🎁</span>'"></span><span class="qua-chu"><span class="qua-ten">Thỏi vàng</span><span class="qua-sl">x30</span></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ghi-chu-cuoi">
+        Cư dân hãy thật chăm chỉ cày cuốc và tham gia sự kiện Trung Thu cùng đội ngũ Admin nhé.
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ---------- đếm ngược tới giờ khai mở ---------- */
+    (function demNguoc() {
+      // 20:30 ngày 31/08, giờ Việt Nam (+07:00)
+      var MOC_OPEN = new Date("2026-08-31T20:30:00+07:00").getTime();
+      var MOC_CHOT = MOC_OPEN + 7 * 24 * 60 * 60 * 1000;
+
+      var elNgay = document.getElementById("dNgay");
+      var elGio = document.getElementById("dGio");
+      var elPhut = document.getElementById("dPhut");
+      var elGiay = document.getElementById("dGiay");
+      var elTrangThai = document.getElementById("demTrangThai");
+
+      function hai(n) {
+        return n < 10 ? "0" + n : "" + n;
+      }
+
+      function ve() {
+        var now = Date.now();
+        var moc, nhan;
+
+        if (now < MOC_OPEN) {
+          moc = MOC_OPEN;
+          nhan = "Còn lại tới giờ khai mở";
+        } else if (now < MOC_CHOT) {
+          moc = MOC_CHOT;
+          nhan = "Đua top đang diễn ra — còn lại tới lúc chốt giải";
+        } else {
+          elNgay.textContent = elGio.textContent = elPhut.textContent = elGiay.textContent = "00";
+          elTrangThai.textContent = "Đã chốt giải, chờ Admin trao thưởng";
+          return;
+        }
+
+        var con = moc - now;
+        elNgay.textContent = hai(Math.floor(con / 86400000));
+        elGio.textContent = hai(Math.floor(con / 3600000) % 24);
+        elPhut.textContent = hai(Math.floor(con / 60000) % 60);
+        elGiay.textContent = hai(Math.floor(con / 1000) % 60);
+        elTrangThai.textContent = nhan;
+      }
+
+      ve();
+      setInterval(ve, 1000);
+    })();
+
+    /* ---------- hoa mai rơi ---------- */
+    document.addEventListener("DOMContentLoaded", function () {
+      var khung = document.getElementById("mainApricotContainer");
+      if (!khung) return;
+      for (var i = 0; i < 18; i++) {
+        var hoa = document.createElement("div");
+        hoa.className = "apricot-flower";
+        hoa.style.left = Math.random() * 100 + "vw";
+        hoa.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        hoa.style.animationDelay = (Math.random() * 5) + "s";
+        hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
+        khung.appendChild(hoa);
+      }
+    });
+  </script>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

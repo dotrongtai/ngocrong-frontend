@@ -1,23 +1,23 @@
-/* ==========================================================
-   posts.js — dữ liệu bài đăng dùng chung
-   Nạp ở cả index.html và dien-dan.html:
-       <script src="js/posts.js"></script>
-
-   THÊM BÀI MỚI: chèn object vào ĐẦU mảng BAI_DANG.
-     id       : chuỗi không dấu, không trùng — dùng cho link trực tiếp
-     icon     : emoji hiện bên trái
-     tieuDe   : tiêu đề bài
-     tomTat   : mô tả ngắn hiện ở danh sách
-     tag      : nhãn hiển thị
-     tagClass : "" (cam - sự kiện) | "tag-tin" (xanh) | "tag-bao-tri" (xám)
-     ngay     : "YYYY-MM-DD"
-     ghim     : true để luôn nằm trên cùng
-     lien     : có giá trị -> bấm vào chuyển sang trang đó
-                để trống -> mở hộp đọc bài ngay tại chỗ
-     noi      : nội dung HTML hiện trong hộp đọc bài
-   ========================================================== */
-
 const BAI_DANG = [
+  {
+    id: "dua-top-open",
+    icon: "🏆",
+    tieuDe: "Đua Top Khai Mở — Khai mở 20:30 ngày 31/08",
+    tomTat: "Ba bảng đua top sức mạnh, nạp và nhiệm vụ. Kéo dài 7 ngày kể từ giờ khai mở, chốt giải và trao thưởng ngay sau đó.",
+    tag: "Sự kiện",
+    tagClass: "",
+    ngay: "2026-08-30",
+    ghim: true,
+    lien: "dua-top.html",
+    noi: `
+      <p>Máy chủ khai mở lúc <strong>20:30 ngày 31/08</strong>. Ngay từ giờ đó, ba bảng
+      đua top bắt đầu tính điểm và kéo dài liên tục 7 ngày.</p>
+      <p><strong>Đua top sức mạnh</strong> — xếp theo tổng sức mạnh nhân vật lúc chốt.</p>
+      <p><strong>Đua top nạp</strong> — xếp theo tổng tiền nạp tích luỹ trong 7 ngày.</p>
+      <p><strong>Đua top nhiệm vụ</strong> — xếp theo số nhiệm vụ hoàn thành.</p>
+      <p>Cư dân hãy thật chăm chỉ cày cuốc và tham gia sự kiện Trung Thu cùng đội ngũ Admin nhé.</p>
+    `
+  },
   {
     id: "co-che-trong-game",
     icon: "⚙️",
