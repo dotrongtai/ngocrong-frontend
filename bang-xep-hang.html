@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Xếp Hạng - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+
+  <style>
+    /* ---- tab ---- */
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .tab-nut {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 11px 20px;
+      border-radius: 24px;
+      border: 1px solid var(--vien);
+      background: var(--the-nen);
+      color: var(--chu-mo);
+      cursor: pointer;
+      transition: .2s;
+    }
+    .tab-nut:hover { border-color: var(--vang); color: var(--vang); }
+    .tab-nut.dang-chon {
+      background: linear-gradient(135deg, var(--vang), var(--vang-dam));
+      border-color: var(--vang);
+      color: var(--nut-2-chu);
+    }
+    .tab-nut i { margin-right: 6px; }
+
+    /* ---- bảng ---- */
+    .khung-bang {
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      border-radius: 16px;
+      overflow-x: auto;
+      box-shadow: 0 8px 24px var(--bong-nhe);
+    }
+
+    .bxh {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      table-layout: fixed;          /* cột thẳng hàng tuyệt đối */
+      font-size: 15.5px;
+    }
+
+    .bxh th {
+      padding: 15px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      color: var(--chu-mo);
+      background: rgba(255, 204, 0, .09);
+      border-bottom: 2px solid var(--vien);
+      white-space: nowrap;
+    }
+
+    .bxh td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--vien-mo);
+      vertical-align: middle;
+      font-weight: 600;
+    }
+
+    /* kẻ dọc ngăn cột */
+    .bxh th + th,
+    .bxh td + td {
+      border-left: 1px solid var(--vien-mo);
+    }
+
+    .bxh tbody tr:last-child td { border-bottom: none; }
+    .bxh tbody tr:nth-child(even) { background: rgba(255, 204, 0, .035); }
+    .bxh tbody tr:hover { background: rgba(255, 204, 0, .09); }
+
+    /* ---- căn cột ---- */
+    .bxh .c-hang { width: 78px;  text-align: center; }
+    .bxh .c-ten  { text-align: center; }
+    .bxh .c-so   { text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    /* độ rộng cột số theo từng bảng */
+    .bxh.b-sucmanh { min-width: 780px; }
+    .bxh.b-sucmanh .c-so   { width: 18%; }
+    .bxh.b-sucmanh .c-tong { width: 21%; }
+    .bxh.b-nhiemvu .c-so   { width: 20%; }
+    .bxh.b-nap     .c-so   { width: 28%; }
+
+    .bxh .ten {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--chu);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bxh .tong {
+      color: var(--vang);
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    /* ---- hành tinh ---- */
+    .bxh .c-ht { width: 96px; text-align: center; }
+
+    .ht {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+    }
+    .ht img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+    .ht .ht-thay-the { font-size: 22px; line-height: 1; }
+
+    .huy-hieu {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--nut-2-chu);
+      background: linear-gradient(135deg, #9aa3ad, #6c757d);
+    }
+    .huy-hieu.h1 { background: linear-gradient(135deg, #FFD34D, #E0A800); }
+    .huy-hieu.h2 { background: linear-gradient(135deg, #D7DDE4, #9AA5B1); }
+    .huy-hieu.h3 { background: linear-gradient(135deg, #E2A163, #B26B2C); }
+    .huy-hieu.thuong {
+      background: transparent;
+      border: 1px solid var(--vien);
+      color: var(--chu-mo);
+      font-size: 14px;
+    }
+
+    .trang-thai {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--chu-mo);
+      font-size: 15px;
+    }
+
+    .ghi-chu {
+      font-size: 13px;
+      color: var(--chu-mo);
+      margin-top: 14px;
+      padding-left: 13px;
+      border-left: 2px solid var(--cam);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 720px) {
+      .bxh { font-size: 14px; min-width: 560px; }
+      .bxh th, .bxh td { padding: 11px 10px; }
+      .bxh .c-hang { width: 58px; }
+      .bxh .c-ht { width: 66px; }
+      .bxh .ten, .bxh .tong { font-size: 14.5px; }
+      .ht img { width: 26px; height: 26px; }
+      .ht .ht-thay-the { font-size: 18px; }
+      .huy-hieu { width: 30px; height: 30px; font-size: 13px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+
+      <div class="hero-banner" style="padding:32px 20px;">
+        <h2><i class="fa-solid fa-ranking-star"></i> BẢNG XẾP HẠNG</h2>
+        <p>Top 50 cư dân dẫn đầu máy chủ Ngọc Rồng Hoa Mai.</p>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-nut dang-chon" data-loai="sucmanh">
+          <i class="fa-solid fa-fire"></i> Top Sức Mạnh
+        </button>
+        <button class="tab-nut" data-loai="nhiemvu">
+          <i class="fa-solid fa-scroll"></i> Top Nhiệm Vụ
+        </button>
+        <button class="tab-nut" data-loai="nap">
+          <i class="fa-solid fa-gem"></i> Top Nạp
+        </button>
+      </div>
+
+      <div class="khung-bang">
+        <div id="noiDungBang">
+          <div class="trang-thai">Đang tải bảng xếp hạng...</div>
+        </div>
+      </div>
+
+      <p class="ghi-chu">
+        Dữ liệu được cập nhật lại mỗi 5 phút. Sức mạnh tổng bằng sức mạnh sư phụ cộng sức mạnh đệ tử.
+      </p>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    var loaiHienTai = 'sucmanh';
+    var boNho = {};
+
+    function soVn(n) {
+      return Number(n || 0).toLocaleString('vi-VN');
+    }
+
+    function huyHieu(i) {
+      var cls = i === 1 ? 'h1' : i === 2 ? 'h2' : i === 3 ? 'h3' : 'thuong';
+      return '<span class="huy-hieu ' + cls + '">' + i + '</span>';
+    }
+
+    // gender: 0 = Trái Đất, 1 = Namếc, 2 = Xayda
+    var HANH_TINH = [
+      { ten: 'Trái Đất', anh: 'traidat.png' },
+      { ten: 'Namếc',    anh: 'namec.png' },
+      { ten: 'Xayda',    anh: 'xayda.png' }
+    ];
+
+    function oHanhTinh(g) {
+      var i = (g === 0 || g === 1 || g === 2) ? g : 0;
+      var h = HANH_TINH[i];
+      return '<span class="ht" title="' + h.ten + '">'
+        + '<img src="assets/images/prizes/' + h.anh + '" alt="' + h.ten + '" '
+        + 'onerror="this.outerHTML=\'<span class=&quot;ht-thay-the&quot;>🪐</span>\'">'
+        + '</span>';
+    }
+
+    function thoat(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function veSucManh(ds) {
+      var html = '<table class="bxh b-sucmanh"><thead><tr>'
+        + '<th class="c-hang">Hạng</th>'
+        + '<th class="c-ht">Hành tinh</th>'
+        + '<th class="c-ten">Người chơi</th>'
+        + '<th class="c-so">Sức mạnh sư phụ</th>'
+        + '<th class="c-so">Sức mạnh đệ tử</th>'
+        + '<th class="c-so c-tong">Tổng sức mạnh</th>'
+        + '</tr></thead><tbody>';
+      ds.forEach(function (x, i) {
+        html += '<tr>'
+          + '<td class="c-hang">' + huyHieu(i + 1) + '</td>'
+          + '<td class="c-ht">' + oHanhTinh(x.gender) + '</td>'
+          + '<td class="c-ten ten">' + thoat(x.name) + '</td>'
+          + '<td class="c-so">' + soVn(x.suPhu) + '</td>'
+          + '<td class="c-so">' + soVn(x.deTu) + '</td>'
+          + '<td class="c-so c-tong tong">' + soVn(x.tong) + '</td>'
+          + '</tr>';
+      });
+      return html + '</tbody></table>';
+    }
+
+    function veNhiemVu(ds) {
+      var html = '<table class="bxh b-nhiemvu"><thead><tr>'
+        + '<th class="c-hang">Hạng</th>'
+        + '<th class="c-ht">Hành tinh</th>'
+        + '<th class="c-ten">Người chơi</th>'
+        + '<th class="c-so">Nhiệm vụ chính</th>'
+        + '<th class="c-so">Nhiệm vụ phụ</th>'
+        + '</tr></thead><tbody>';
+      ds.forEach(function (x, i) {
+        html += '<tr>'
+          + '<td class="c-hang">' + huyHieu(i + 1) + '</td>'
+          + '<td class="c-ht">' + oHanhTinh(x.gender) + '</td>'
+          + '<td class="c-ten ten">' + thoat(x.name) + '</td>'
+          + '<td class="c-so tong">' + soVn(x.main) + '</td>'
+          + '<td class="c-so">' + soVn(x.sub) + '</td>'
+          + '</tr>';
+      });
+      return html + '</tbody></table>';
+    }
+
+    function veNap(ds) {
+      var html = '<table class="bxh b-nap"><thead><tr>'
+        + '<th class="c-hang">Hạng</th>'
+        + '<th class="c-ht">Hành tinh</th>'
+        + '<th class="c-ten">Người chơi</th>'
+        + '<th class="c-so">Tổng nạp</th>'
+        + '</tr></thead><tbody>';
+      ds.forEach(function (x, i) {
+        html += '<tr>'
+          + '<td class="c-hang">' + huyHieu(i + 1) + '</td>'
+          + '<td class="c-ht">' + oHanhTinh(x.gender) + '</td>'
+          + '<td class="c-ten ten">' + thoat(x.name) + '</td>'
+          + '<td class="c-so tong">' + soVn(x.tongNap) + 'đ</td>'
+          + '</tr>';
+      });
+      return html + '</tbody></table>';
+    }
+
+    function ve(loai, ds) {
+      var khung = document.getElementById('noiDungBang');
+      if (!ds || ds.length === 0) {
+        khung.innerHTML = '<div class="trang-thai">Chưa có dữ liệu xếp hạng.</div>';
+        return;
+      }
+      if (loai === 'sucmanh') khung.innerHTML = veSucManh(ds);
+      else if (loai === 'nhiemvu') khung.innerHTML = veNhiemVu(ds);
+      else khung.innerHTML = veNap(ds);
+    }
+
+    async function tai(loai) {
+      loaiHienTai = loai;
+
+      if (boNho[loai]) {
+        ve(loai, boNho[loai]);
+        return;
+      }
+
+      document.getElementById('noiDungBang').innerHTML =
+        '<div class="trang-thai">Đang tải bảng xếp hạng...</div>';
+
+      try {
+        var kq = await apiCall('/rank/' + loai, 'GET');
+        if (kq && kq.success) {
+          boNho[loai] = kq.data;
+          if (loaiHienTai === loai) ve(loai, kq.data);
+        } else {
+          document.getElementById('noiDungBang').innerHTML =
+            '<div class="trang-thai">Không tải được dữ liệu: '
+            + ((kq && kq.message) || 'lỗi không xác định') + '</div>';
+        }
+      } catch (e) {
+        document.getElementById('noiDungBang').innerHTML =
+          '<div class="trang-thai">Lỗi kết nối máy chủ.</div>';
+      }
+    }
+
+    document.querySelectorAll('.tab-nut').forEach(function (nut) {
+      nut.addEventListener('click', function () {
+        document.querySelectorAll('.tab-nut').forEach(function (n) {
+          n.classList.remove('dang-chon');
+        });
+        nut.classList.add('dang-chon');
+        tai(nut.getAttribute('data-loai'));
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      tai('sucmanh');
+
+      var khung = document.getElementById('mainApricotContainer');
+      if (khung) {
+        for (var i = 0; i < 18; i++) {
+          var hoa = document.createElement('div');
+          hoa.className = 'apricot-flower';
+          hoa.style.left = Math.random() * 100 + 'vw';
+          hoa.style.animationDuration = (Math.random() * 3 + 4) + 's';
+          hoa.style.animationDelay = (Math.random() * 5) + 's';
+          hoa.style.transform = 'scale(' + (Math.random() * 0.6 + 0.6) + ')';
+          khung.appendChild(hoa);
+        }
+      }
+    });
+  </script>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
