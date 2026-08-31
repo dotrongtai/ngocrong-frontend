@@ -26,7 +26,6 @@
       transition: .25s;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
     .gift-card:hover {
       transform: translateY(-4px);
@@ -39,9 +38,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      border-bottom: 1px dashed var(--vien);
-      padding-bottom: 10px;
+      margin-top: 14px;
+      border-top: 1px dashed var(--vien);
+      padding-top: 14px;
     }
 
     .gift-code-text {
@@ -115,6 +114,12 @@
       color: var(--chu);
     }
 
+    .sub-item-group {
+      margin-top: 4px;
+      padding-left: 8px;
+      border-left: 2px solid rgba(255, 204, 0, 0.3);
+    }
+
     .search-box-container {
       margin-bottom: 20px;
       display: flex;
@@ -179,136 +184,151 @@
 
         <div class="gift-grid" id="giftGrid">
 
-          <!-- Code 1 -->
+          <!-- Code 1: nromai -->
           <div class="gift-card" data-keywords="nromai thoi vang hong ngoc">
-            <div class="gift-top">
-              <span class="gift-code-text" id="code-nromai">nromai</span>
-              <button class="btn-copy" onclick="copyCode('nromai')"><i class="fa-regular fa-copy"></i> Copy</button>
-            </div>
-            <div>
+            <div style="flex: 1;">
               <div class="gift-items-title">Phần thưởng bao gồm:</div>
               <ul class="gift-item-list">
                 <li class="gift-item-row">
-                  <img src="images/items/thoi_vang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x35</strong> Thỏi vàng</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/hong_ngoc.png" alt="Hồng ngọc" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/hongngoc.png" alt="Hồng ngọc" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x50</strong> Hồng ngọc</div>
                 </li>
               </ul>
             </div>
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-nromai">nromai</span>
+              <button class="btn-copy" onclick="copyCode('nromai')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <!-- Code 2 -->
-          <div class="gift-card" data-keywords="duatop ngoc rong sao pha le da nang cap">
+          <!-- Code 2: duatop -->
+          <div class="gift-card" data-keywords="duatop 3sao sao pha le item cap 1 da nang cap bohuyet bokhi giapxen cuongno tat ruby saphia lucbao titan spl1 spl2 spl3 spl4">
+            <div style="flex: 1;">
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="assets/images/prizes/3sao.png" alt="Ngọc rồng 3s" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Bộ ngọc rồng 3s</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="assets/images/prizes/spl1.png" alt="Sao pha lê" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info">
+                    <strong>x99</strong> Sao pha lê mỗi loại
+                    <div class="sub-item-group"></div>
+                  </div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="assets/images/prizes/cuongno.png" alt="Item cấp 1" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info">
+                    <strong>x10</strong> Bổ huyết, Bổ khí, Giáp xên, Cuồng nộ
+                    <div class="sub-item-group"></div>
+                  </div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="assets/images/prizes/tat.png" alt="Đá nâng cấp" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info">
+                    <strong>x99</strong> Đá nâng cấp mỗi loại: Ruby, Saphia, Lục bảo, Titan
+                    <div class="sub-item-group"></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
             <div class="gift-top">
               <span class="gift-code-text" id="code-duatop">duatop</span>
               <button class="btn-copy" onclick="copyCode('duatop')"><i class="fa-regular fa-copy"></i> Copy</button>
             </div>
-            <div>
-              <div class="gift-items-title">Phần thưởng bao gồm:</div>
-              <ul class="gift-item-list">
-                <li class="gift-item-row">
-                  <img src="images/items/ngoc_rong_3s.png" alt="Ngọc rồng 3s" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x5</strong> Bộ ngọc rồng 3 sao</div>
-                </li>
-                <li class="gift-item-row">
-                  <img src="images/items/sao_pha_le.png" alt="Sao pha lê" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x99</strong> Sao pha lê</div>
-                </li>
-                <li class="gift-item-row">
-                  <img src="images/items/item_cap_1.png" alt="Item cấp 1" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x10</strong> Item cấp 1</div>
-                </li>
-                <li class="gift-item-row">
-                  <img src="images/items/da_nang_cap.png" alt="Đá nâng cấp" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x99</strong> Đá nâng cấp mỗi loại</div>
-                </li>
-              </ul>
-            </div>
           </div>
 
-          <!-- Code 3 -->
+          <!-- Code 3: tanthu -->
           <div class="gift-card" data-keywords="tanthu cai trang dai thien gioi canh thien than ac quy">
-            <div class="gift-top">
-              <span class="gift-code-text" id="code-tanthu">tanthu</span>
-              <button class="btn-copy" onclick="copyCode('tanthu')"><i class="fa-regular fa-copy"></i> Copy</button>
-            </div>
-            <div>
+            <div style="flex: 1;">
               <div class="gift-items-title">Phần thưởng bao gồm:</div>
               <ul class="gift-item-list">
                 <li class="gift-item-row">
-                  <img src="images/items/ct_dai_thien_gioi.png" alt="Cải trang Đại Thiên Giới" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/daithiengioi.png" alt="Cải trang Đại Thiên Giới" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>1x</strong> Cải trang Đại Thiên Giới 3D (24% SD, 23% HP KI, 20% TNSM, đẹp tăng 5% SD, không ảnh hưởng cái lạnh, không giao dịch)</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/canh_thien_than.png" alt="Cánh thiên thần ác quỷ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/canhthienthan.png" alt="Cánh thiên thần ác quỷ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>1x</strong> Cánh thiên thần ác quỷ (7% SD, HP, KI 3D, không giao dịch)</div>
                 </li>
               </ul>
             </div>
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-tanthu">tanthu</span>
+              <button class="btn-copy" onclick="copyCode('tanthu')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <!-- Code 4 -->
-          <div class="gift-card" data-keywords="vatpham banh duoi khi diem dau hop hit">
-            <div class="gift-top">
-              <span class="gift-code-text" id="code-vatpham">vatpham</span>
-              <button class="btn-copy" onclick="copyCode('vatpham')"><i class="fa-regular fa-copy"></i> Copy</button>
-            </div>
-            <div>
+          <!-- Code 4: vatpham -->
+          <div class="gift-card" data-keywords="vatpham banh trung thu trungthu1trung trungthu2trung trungthudb duoi khi duoi_khi diem dau hop hit">
+            <div style="flex: 1;">
               <div class="gift-items-title">Phần thưởng bao gồm:</div>
               <ul class="gift-item-list">
                 <li class="gift-item-row">
-                  <img src="images/items/banh.png" alt="Bánh" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x5</strong> Bánh mỗi loại</div>
+                  <img src="assets/images/prizes/trungthu1trung.png" alt="Bánh mỗi loại" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info">
+                    <strong>x5</strong> Bánh trung thu 1 trứng, 2 trứng, đặc biệt
+                    <div class="sub-item-group"></div>
+                  </div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/duoi_khi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/duoikhi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x5</strong> Đuôi khỉ</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/diem.png" alt="Diêm" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/diem.png" alt="Diêm" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x5</strong> Diêm</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/dau.png" alt="Dầu" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/dau.png" alt="Dầu" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x5</strong> Dầu</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/hop_hit.png" alt="Hộp hit" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/hophit.png" alt="Hộp hit" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>1x</strong> Hộp quà Hit</div>
                 </li>
               </ul>
             </div>
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-vatpham">vatpham</span>
+              <button class="btn-copy" onclick="copyCode('vatpham')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <!-- Code 5 -->
-          <div class="gift-card" data-keywords="vietnamvodich duoi khi banh thoi vang co bon la">
-            <div class="gift-top">
-              <span class="gift-code-text" id="code-vietnamvodich">vietnamvodich</span>
-              <button class="btn-copy" onclick="copyCode('vietnamvodich')"><i class="fa-regular fa-copy"></i> Copy</button>
-            </div>
-            <div>
+          <!-- Code 5: vietnamvodich -->
+          <div class="gift-card" data-keywords="vietnamvodich duoi khi banh trungthu1trung trungthu2trung trungthudb thoi vang co bon la">
+            <div style="flex: 1;">
               <div class="gift-items-title">Phần thưởng bao gồm:</div>
               <ul class="gift-item-list">
                 <li class="gift-item-row">
-                  <img src="images/items/duoi_khi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/duoikhi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x5</strong> Đuôi khỉ</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/banh.png" alt="Bánh" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
-                  <div class="gift-item-info"><strong>x5</strong> Bánh mỗi loại</div>
+                  <img src="assets/images/prizes/trungthu1trung.png" alt="Bánh mỗi loại" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info">
+                    <strong>x5</strong> Bánh trung thu 1 trứng, 2 trứng, đặc biệt
+                    <div class="sub-item-group"></div>
+                  </div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/thoi_vang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/thoivang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>15x</strong> Thỏi vàng</div>
                 </li>
                 <li class="gift-item-row">
-                  <img src="images/items/co_bon_la.png" alt="Cỏ bốn lá" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <img src="assets/images/prizes/cobonla.png" alt="Cỏ bốn lá" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
                   <div class="gift-item-info"><strong>x5</strong> Cỏ bốn lá</div>
                 </li>
               </ul>
+            </div>
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-vietnamvodich">vietnamvodich</span>
+              <button class="btn-copy" onclick="copyCode('vietnamvodich')"><i class="fa-regular fa-copy"></i> Copy</button>
             </div>
           </div>
 
