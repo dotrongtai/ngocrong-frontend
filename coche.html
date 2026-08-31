@@ -85,14 +85,135 @@
       border-left: 2px solid var(--cam);
     }
 
-    /* thẻ trải ngang toàn hàng */
-    .cc-card.rong { grid-column: 1 / -1; }
-
     .cc-cta {
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
       margin-top: 16px;
+    }
+
+    /* Bảng nhiệm vụ KOL trong modal */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 12px;
+    }
+    .kol-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+    .kol-table th, .kol-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--popup-vien, var(--vien));
+      color: var(--popup-chu-mo, var(--chu-mo));
+      vertical-align: middle;
+    }
+    .kol-table th {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--popup-vang, var(--vang));
+      font-weight: 700;
+    }
+    .kol-table td strong { color: var(--popup-chu, var(--chu)); }
+
+    /* Căn chỉnh từng dòng quà tương ứng thẳng hàng */
+    .reward-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .reward-row:last-child {
+      border-bottom: none;
+    }
+    .reward-name {
+      color: var(--popup-chu, var(--chu));
+    }
+    .reward-qty {
+      font-weight: 700;
+      color: var(--popup-vang, var(--vang));
+      background: rgba(255, 204, 0, 0.2);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    /* Thanh tìm kiếm cơ chế */
+    .search-box-container {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .search-box-container input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--vien);
+      background: var(--the-nen);
+      color: var(--chu);
+      font-size: 15px;
+    }
+    .search-box-container input:focus {
+      outline: none;
+      border-color: var(--vang);
+    }
+
+    /* Popup Modal Chung (Màu nền nghịch đảo với Mode) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    /* Biến màu mặc định cho Popup ở Dark mode (sẽ đổi ngược khi bật Light mode thông qua JS) */
+    .modal-content {
+      --popup-nen: #1e1135; /* Tím đậm */
+      --popup-chu: #f3f4f6;
+      --popup-chu-mo: #d1d5db;
+      --popup-vien: rgba(255, 204, 0, 0.3);
+      --popup-vang: #ffcc00;
+
+      background: var(--popup-nen);
+      border: 1px solid var(--popup-vien);
+      border-radius: 14px;
+      padding: 24px;
+      width: 90%;
+      max-width: 700px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      position: relative;
+      color: var(--popup-chu);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: none;
+      border: none;
+      color: var(--popup-chu);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .modal-content h3 {
+      color: var(--popup-vang);
+      margin-bottom: 15px;
+      font-size: 19px;
+    }
+    .modal-body p {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--popup-chu-mo);
+      margin-bottom: 10px;
     }
 
     @media (max-width: 620px) {
@@ -115,14 +236,20 @@
         <p>Những điều cần biết trước khi bắt đầu hành trình ở Ngọc Rồng Hoa Mai.</p>
       </div>
 
+      <!-- Thanh tìm kiếm cơ chế nhanh -->
+      <div class="search-box-container" style="margin-top: 20px;">
+        <input type="text" id="searchMechanism" placeholder="Tìm kiếm cơ chế (ví dụ: ngọc xanh, dùi đục, đá hemita, vàng, hồng ngọc, skh, giftcode, kol...)" onkeyup="filterMechanisms()">
+      </div>
+
       <section class="news-section" style="margin-top:10px;">
         <div class="news-head">
           <h2>Tổng quan</h2>
         </div>
 
-        <div class="co-che-grid">
+        <div class="co-che-grid" id="mechanismGrid">
 
-          <div class="cc-card">
+          <!-- Giftcode -->
+          <div class="cc-card" data-keywords="giftcode code">
             <div class="cc-top">
               <div class="cc-icon">🎁</div>
               <h3>Giftcode</h3>
@@ -135,125 +262,274 @@
             <p class="cc-note">Quay vòng quay xong, copy mã rồi vào game gặp Santa nhập là nhận đồ ngay.</p>
           </div>
 
-          <div class="cc-card">
+          <!-- Set Kích Hoạt (SKH) -->
+          <div class="cc-card" data-keywords="skh set kich hoat set than vu tru kaio cadic m nail chien binh namec">
+            <div class="cc-top">
+              <div class="cc-icon">🧬</div>
+              <h3>Set Kích Hoạt (SKH)</h3>
+            </div>
+            <p>Các bộ Set kích hoạt gốc ghép từ <strong>mảnh vỡ capsule</strong> và <strong>khoáng tái chế</strong>.</p>
+            <div class="cc-cta" style="margin-top: 12px;">
+              <button class="btn-secondary" onclick="openModal('skhModal')" style="cursor:pointer; border:none; padding:8px 16px; border-radius:8px;">
+                <i class="fa-solid fa-eye"></i> Xem chi tiết
+              </button>
+            </div>
+          </div>
+
+          <!-- Ngọc xanh -->
+          <div class="cc-card" data-keywords="ngoc xanh">
+            <div class="cc-top">
+              <div class="cc-icon">🟢</div>
+              <h3>Ngọc Xanh</h3>
+            </div>
+            <p>Giữ nguyên cơ chế cơ bản, dùng để mua các vật phẩm thiết yếu và quay vật phẩm hỗ trợ trong game.</p>
+          </div>
+
+          <!-- Hồng ngọc và Điểm tích luỹ -->
+          <div class="cc-card" data-keywords="hong ngoc diem tich luy tich luy">
+            <div class="cc-top">
+              <div class="cc-icon">🔴</div>
+              <h3>Hồng Ngọc & Điểm Tích Luỹ</h3>
+            </div>
+            <p>Các boss rơi Hồng Ngọc: <strong>TDST ở Namek, Bojack Trái Đất, Cell</strong></p>
+            <p>Các boss từ TDST Fide trở lên đều có <strong>5 điểm</strong></p>
+            <div class="cc-cta" style="margin-top: 12px;">
+              <button class="btn-secondary" onclick="openModal('hongNgocModal')" style="cursor:pointer; border:none; padding:8px 16px; border-radius:8px;">
+                <i class="fa-solid fa-eye"></i> Xem chi tiết
+              </button>
+            </div>
+          </div>
+
+          <!-- Nhiệm vụ KOL -->
+          <div class="cc-card" data-keywords="nhiem vu kol">
+            <div class="cc-top">
+              <div class="cc-icon">📜</div>
+              <h3>Nhiệm Vụ KOL</h3>
+            </div>
+            <p>Hệ thống nhiệm vụ đặc biệt dành cho KOL nhận nhiều phần quà giá trị hấp dẫn.</p>
+            <div class="cc-cta" style="margin-top: 12px;">
+              <button class="btn-secondary" onclick="openModal('kolModal')" style="cursor:pointer; border:none; padding:8px 16px; border-radius:8px;">
+                <i class="fa-solid fa-eye"></i> Xem chi tiết
+              </button>
+            </div>
+          </div>
+
+          <!-- Cày chay & Tiền tệ -->
+          <div class="cc-card" data-keywords="cay chay vang vach nui moori kaio toribot">
             <div class="cc-top">
               <div class="cc-icon">⛏️</div>
-              <h3>Cày chay lên vàng</h3>
+              <h3>Cày Chay Lên Vàng & Giới Hạn Sức Mạnh</h3>
             </div>
-            <p>Server không chặn cày chay. Không nạp một đồng vẫn lên được top.</p>
             <ul class="cc-list">
-              <li>Ngọc <strong>free</strong>, vàng up thoải mái</li>
-              <li>Không giới hạn thời gian cày</li>
+              <li><strong>Cày chay lên vàng:</strong> Nội dung cày chủ yếu là up các map tương lai và Cooler.</li>
+              <li><strong>Giới hạn sức mạnh:</strong> Mở giới hạn sức mạnh tại <strong>Vách núi Moori</strong>, sau khi mở max cần lên Kaio mở hết phần còn lại (Đủ 18 tỉ mới gặp được Già Làng ở Vách núi Morri).</li>
+              <li><strong>Đổi vật phẩm:</strong> Đổi Hồng ngọc & Thỏi vàng trực tiếp tại NPC <strong>Toribot</strong>.</li>
             </ul>
           </div>
 
-          <div class="cc-card">
+          <!-- Dùi đục & Đá Hemitia -->
+          <div class="cc-card" data-keywords="dui duc da hemitia">
             <div class="cc-top">
-              <div class="cc-icon">🧬</div>
-              <h3>Set kích hoạt M miễn phí</h3>
+              <div class="cc-icon">🔨</div>
+              <h3>Dùi Đục & Đá Hemitia</h3>
             </div>
-            <p>Farm <strong>3 map đầu của cả 3 hành tinh</strong> là nhận được set kích hoạt M.</p>
-            <p class="cc-note">Làm ngay từ khi mới vào game, không cần chờ sự kiện.</p>
+            <p>Săn <strong>Boss Mặt Trời</strong> xuất hiện ngẫu nhiên tại các làng và map thường để sở hữu Dùi đục và Đá Hemitia.</p>
           </div>
 
-          <div class="cc-card">
+          <!-- Đệ tử -->
+          <div class="cc-card" data-keywords="de tu broly super broly mabu">
             <div class="cc-top">
-              <div class="cc-icon">🏆</div>
-              <h3>Đua top</h3>
+              <div class="cc-icon">👦</div>
+              <h3>Hệ Thống Đệ Tử</h3>
             </div>
             <ul class="cc-list">
-              <li><strong>Top sự kiện</strong> — reset 7 ngày một lần, thưởng capsule kích hoạt</li>
+              <li><strong>Đệ tử thường:</strong> Giết chết Broly hoặc Super Broly là có đệ tử liền. Ban đầu hãy sử dụng cải trang Admin tặng trong Giftcode đầu game để hỗ trợ.</li>
+              <li><strong>Đệ tử Mabu:</strong> Săn boss 10h tại thành phố Vegeta.</li>
+            </ul>
+          </div>
+
+          <!-- Đua top -->
+          <div class="cc-card" data-keywords="dua top">
+            <div class="cc-top">
+              <div class="cc-icon">🏆</div>
+              <h3>Đua Top</h3>
+            </div>
+            <ul class="cc-list">
+              <li><strong>Top sự kiện:</strong> Reset 7 ngày một lần, thưởng capsule kích hoạt.</li>
               <li><strong>Top sức mạnh</strong></li>
               <li><strong>Top nạp</strong></li>
               <li><strong>Top nhiệm vụ</strong></li>
             </ul>
           </div>
-
-          <div class="cc-card">
-            <div class="cc-top">
-              <div class="cc-icon">👹</div>
-              <h3>Săn boss tích điểm</h3>
-            </div>
-            <p>Hạ boss để tích điểm, mang điểm đi <strong>đổi quà</strong>.</p>
-            <p class="cc-note">Boss sẽ rơi Diêm dùng cho sự kiện Trung Thu.</p>
-          </div>
-
-          <div class="cc-card">
-            <div class="cc-top">
-              <div class="cc-icon">🐉</div>
-              <h3>Hoạt động bang hội</h3>
-            </div>
-            <ul class="cc-list">
-              <li><strong>Ngọc Rồng Sao Đen</strong></li>
-              <li><strong>Bang hội</strong> — cùng làm phó bản, đua top bang</li>
-            </ul>
-          </div>
-
-          <div class="cc-card">
-            <div class="cc-top">
-              <div class="cc-icon">💎</div>
-              <h3>Nhận ngọc xanh tại Toribot</h3>
-            </div>
-            <p>Toribot là nơi bạn có thể nhận <strong>ngọc xanh miễn phí</strong> hàng ngày.</p>
-            <ul class="cc-list">
-              <li>Truy cập Toribot để nhận phần thưởng</li>
-              <li>Không cần nạp tiền vẫn có ngọc xanh</li>
-            </ul>
-            <p class="cc-note">Kiểm tra thường xuyên để không bỏ lỡ phần thưởng hàng ngày.</p>
-          </div>
-
-          <div class="cc-card">
-            <div class="cc-top">
-              <div class="cc-icon">🔴</div>
-              <h3>Farm boss — Hồng ngọc & Điểm</h3>
-            </div>
-            <p>Hạ boss để nhận ngay <strong>hồng ngọc</strong> và <strong>điểm tích lũy</strong>.</p>
-            <ul class="cc-list">
-              <li>Mỗi boss drop hồng ngọc quý giá</li>
-              <li>Dùng điểm để đổi cải trang và vật phẩm hiếm</li>
-            </ul>
-            <p class="cc-note">Càng farm nhiều boss, càng kiếm được nhiều hồng ngọc và điểm.</p>
-          </div>
-
-          <div class="cc-card">
-            <div class="cc-top">
-              <div class="cc-icon">⭐</div>
-              <h3>Nhiệm vụ KOL</h3>
-            </div>
-            <p>Tích cực tham gia nhiệm vụ KOL để sở hữu các vật phẩm độc quyền.</p>
-            <ul class="cc-list">
-              <li>Nhận <strong>cải trang</strong> độc quyền</li>
-              <li>Sở hữu <strong>vật phẩm đeo lưng</strong> đặc biệt</li>
-              <li>Kiếm <strong>pet vĩnh viễn</strong></li>
-            </ul>
-            <p class="cc-note">Đây là cơ hội lấy những vật phẩm không có ở nơi khác.</p>
-          </div>
-
-          <div class="cc-card rong" style="border-left-color: var(--cam);">
-            <div class="cc-top">
-              <div class="cc-icon">🏮</div>
-              <h3>Sự kiện Trung Thu đang diễn ra</h3>
-            </div>
-            <p>Đốt lồng đèn hoa đăng nhận quà ngẫu nhiên, dùng Mặt trăng gọi Khỉ Đột
-            lấy Đuôi khỉ để nhân đôi kinh nghiệm. Thi thoảng trăng hoá đỏ — đó là lúc
-            <strong>Khỉ Đột Vương</strong> xuống núi.</p>
-            <div class="cc-cta">
-              <a href="trung-thu.html" class="btn-secondary" style="text-decoration:none; display:inline-block;">
-                <i class="fa-solid fa-moon"></i> Xem chi tiết sự kiện
-              </a>
-              <a href="dien-dan.html" class="btn-store" style="text-decoration:none; display:inline-block; padding:10px 20px;">
-                <i class="fa-solid fa-newspaper"></i> Về diễn đàn
-              </a>
-            </div>
-          </div>
-
         </div>
       </section>
 
     </div>
   </div>
 
+  <!-- POPUP CHI TIẾT SET KÍCH HOẠT (SKH) -->
+  <div class="modal-overlay" id="skhModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('skhModal')">&times;</button>
+      <h3>Chi Tiết Các Set Kích Hoạt (SKH)</h3>
+      <div class="modal-body">
+        <p><strong>Set Thần Vũ Trụ Kaio:</strong></p>
+        <ul class="cc-list" style="margin-bottom: 10px;">
+          <li><strong>[2]:</strong> Tăng mạnh chí mạng 3%</li>
+          <li><strong>[4]:</strong> Giảm nhẹ hao HP, KI chiêu Kaioken 3-5%</li>
+          <li><strong>[5]:</strong> Tăng mạnh sát thương và giảm mạnh hao HP, KI chiêu Kaioken 40%</li>
+        </ul>
+        
+        <p><strong>Set Cadic M:</strong></p>
+        <ul class="cc-list" style="margin-bottom: 10px;">
+          <li><strong>[2]:</strong> Tăng nhẹ HP và phạm vi ảnh hưởng chiêu phát nổ 20%</li>
+          <li><strong>[4]:</strong> Tăng nhẹ sát thương chiêu phát nổ 20%</li>
+          <li><strong>[5]:</strong> Tăng mạnh sát thương chiêu phát nổ 50%</li>
+        </ul>
+
+        <p><strong>Set Nail Chiến Binh Namếc:</strong></p>
+        <ul class="cc-list">
+          <li><strong>[2]:</strong> Tăng nhẹ sát thương chí mạng 10%</li>
+          <li><strong>[4]:</strong> Giảm nhẹ hồi chiêu Masenko 10%</li>
+          <li><strong>[5]:</strong> Tăng sát thương Masenko, giảm mạnh hồi chiêu Masenko 80%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP CHI TIẾT HỒNG NGỌC -->
+  <div class="modal-overlay" id="hongNgocModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('hongNgocModal')">&times;</button>
+      <h3>Chi Tiết Hồng Ngọc & Điểm Tích Luỹ</h3>
+      <div class="modal-body">
+        <p><strong>Boss rơi Hồng Ngọc:</strong></p>
+        <ul class="cc-list" style="margin-bottom: 10px;">
+          <li>Đội Tàu Sáu Tay (TDST) ở Namek</li>
+          <li>Bojack Trái Đất</li>
+          <li>Cell</li>
+        </ul>
+        <p><strong>Điểm tích luỹ từ Boss:</strong></p>
+        <p>Tất cả các boss từ mức TDST Fide trở lên đều mang lại <strong>5 điểm / boss</strong> khi hạ gục.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP CHI TIẾT NHIỆM VỤ KOL -->
+  <div class="modal-overlay" id="kolModal">
+    <div class="modal-content" style="max-width: 750px;">
+      <button class="modal-close" onclick="closeModal('kolModal')">&times;</button>
+      <h3>Chi Tiết Nhiệm Vụ KOL</h3>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="kol-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">STT</th>
+                <th style="width: 45%;">Nhiệm vụ</th>
+                <th style="width: 40%;">Quà & Số lượng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Nhiệm vụ 1</strong></td>
+                <td>Thu thập 100 cuốn chả giò (Quái doanh trại)</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Trứng rồng vàng nhí</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 2</strong></td>
+                <td>Thu thập 10 chai cuke 2 lít (Boss doanh trại)</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Goku Day VIP</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Cadic Day VIP</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 3</strong></td>
+                <td>Hoàn thành phó bản Destron Gas cấp 70 > 20 lần</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Cờ ma đèn nhảy múa</span>
+                    <span class="reward-qty">1</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 4</strong></td>
+                <td>Đánh bại 10 người trong đại hội võ thuật</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Pet ceberus</span>
+                    <span class="reward-qty">1</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 5</strong></td>
+                <td>Hoàn thành 30 nhiệm vụ siêu khó hàng ngày</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Rada ngọc rồng</span>
+                    <span class="reward-qty">10</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 6</strong></td>
+                <td>Tham gia hạ gục boss baby 5 lần</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Cải trang Picolo</span>
+                    <span class="reward-qty">1</span>
+                  </div>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Goku Day VIP</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Cadic Day VIP</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nhiệm vụ 7</strong></td>
+                <td>Hạ 100.000 quái map tương lai (dùng tự động luyện tập)</td>
+                <td>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Goku Day VIP</span>
+                    <span class="reward-qty">10</span>
+                  </div>
+                  <div class="reward-row">
+                    <span class="reward-name">Xúc xích</span>
+                    <span class="reward-qty">9999</span>
+                  </div>
+                  <div class="reward-row">
+                    <span class="reward-name">Hộp quà Cadic Day VIP</span>
+                    <span class="reward-qty">5</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Xử lý hoa mai rơi
     document.addEventListener("DOMContentLoaded", function () {
       var khung = document.getElementById("mainApricotContainer");
       if (!khung) return;
@@ -266,7 +542,70 @@
         hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
         khung.appendChild(hoa);
       }
+      
+      // Khởi chạy cập nhật màu popup ngay khi load trang
+      updatePopupTheme();
     });
+
+    // Hàm nhận diện chế độ Light/Dark của trang để tự động đổi màu popup ngược lại
+    function updatePopupTheme() {
+      // Kiểm tra xem thẻ html hoặc body có class hoặc attribute light-mode / dark-mode hay dựa vào localStorage/theme.js
+      let isLightMode = document.body.classList.contains('light-mode') || 
+                        document.documentElement.classList.contains('light-mode') ||
+                        localStorage.getItem('theme') === 'light';
+
+      let modals = document.querySelectorAll('.modal-content');
+      modals.forEach(modal => {
+        if (isLightMode) {
+          // Nếu trang đang ở Light mode -> Popup đổi thành màu Tím đậm
+          modal.style.setProperty('--popup-nen', '#20133c');
+          modal.style.setProperty('--popup-chu', '#f3f4f6');
+          modal.style.setProperty('--popup-chu-mo', '#d1d5db');
+          modal.style.setProperty('--popup-vien', '#7c3aed');
+          modal.style.setProperty('--popup-vang', '#facc15');
+        } else {
+          // Nếu trang đang ở Dark mode -> Popup đổi thành màu Sáng (Trắng ngà / Xám sáng)
+          modal.style.setProperty('--popup-nen', '#f8fafc');
+          modal.style.setProperty('--popup-chu', '#0f172a');
+          modal.style.setProperty('--popup-chu-mo', '#334155');
+          modal.style.setProperty('--popup-vien', '#cbd5e1');
+          modal.style.setProperty('--popup-vang', '#b45309');
+        }
+      });
+    }
+
+    // Chức năng mở/đóng Modal chung
+    function openModal(modalId) {
+      updatePopupTheme(); // Cập nhật lại màu sắc trước khi mở
+      document.getElementById(modalId).classList.add('active');
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Đóng popup khi click ra ngoài nội dung
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal-overlay')) {
+        event.target.classList.remove('active');
+      }
+    }
+
+    // Chức năng tìm kiếm động các mục cơ chế
+    function filterMechanisms() {
+      let input = document.getElementById('searchMechanism').value.toLowerCase().trim();
+      let cards = document.querySelectorAll('#mechanismGrid .cc-card');
+
+      cards.forEach(card => {
+        let keywords = card.getAttribute('data-keywords') || '';
+        let textContent = card.innerText.toLowerCase();
+        
+        if (input === "" || keywords.includes(input) || textContent.includes(input)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
   </script>
 
   <script src="js/api.js"></script>

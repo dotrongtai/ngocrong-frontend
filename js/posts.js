@@ -1,5 +1,25 @@
 const BAI_DANG = [
   {
+    id: "giftcode-khai-mo",
+    icon: "🎁",
+    tieuDe: "Tổng Hợp Giftcode Khai Mở Server & Tân Thủ",
+    tomTat: "Nhận ngay hàng loạt mã quà tặng giá trị khủng như nromai, duatop, tanthu, vatpham và vietnamvodich tại NPC Santa.",
+    tag: "Giftcode",
+    tagClass: "tag-tin",
+    ngay: "2026-08-31",
+    ghim: true,
+    lien: "giftcode.html",
+    noi: `
+      <p>Chào mừng các cư dân đến với <strong>Ngọc Rồng Hoa Mai</strong>! Đội ngũ Admin xin gửi tặng bộ giftcode khởi đầu vô cùng giá trị để hỗ trợ hành trình cày cuốc:</p>
+      <p><strong>1. nromai</strong> — x35 Thỏi vàng, x50 Hồng ngọc</p>
+      <p><strong>2. duatop</strong> — x5 Bộ ngọc rồng 3s, x99 Sao pha lê, x10 Item cấp 1, x99 Đá nâng cấp mỗi loại</p>
+      <p><strong>3. tanthu</strong> — 1x Cải trang Đại Thiên Giới 3D, 1x Cánh thiên thần ác quỷ</p>
+      <p><strong>4. vatpham</strong> — x5 Bánh mỗi loại, x5 Đuôi khỉ, x5 Diêm, x5 Dầu, 1x Hộp quà Hit</p>
+      <p><strong>5. vietnamvodich</strong> — x5 Đuôi khỉ, x5 Bánh mỗi loại, 15x Thỏi vàng, x5 Cỏ bốn lá</p>
+      <p>Hãy truy cập trang chi tiết giftcode hoặc đến gặp NPC <strong>Santa</strong> trong game để nhập mã ngay nhé!</p>
+    `
+  },
+  {
     id: "dua-top-open",
     icon: "🏆",
     tieuDe: "Đua Top Khai Mở — Khai mở 20:30 ngày 31/08",
@@ -55,7 +75,7 @@ const BAI_DANG = [
     tag: "Sự kiện",
     tagClass: "",
     ngay: "2026-08-27",
-    ghim: true,
+    ghim: false,
     lien: "trungthu.html",
     noi: `
       <p>Rằm tháng Tám đã về với <strong>Ngọc Rồng Hoa Mai</strong>. Mùa này có hai việc đáng làm.</p>

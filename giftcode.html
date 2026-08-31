@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giftcode & Mã Quà Tặng - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+
+  <style>
+    .gift-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .gift-card {
+      background: var(--the-nen);
+      border: 1px solid var(--vien);
+      border-left: 4px solid var(--vang);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 8px 24px var(--bong-nhe);
+      transition: .25s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .gift-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--vang);
+      box-shadow: 0 14px 32px var(--bong-nhe),
+                  0 0 22px rgba(255, 204, 0, calc(.18 * var(--hao-quang)));
+    }
+
+    .gift-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed var(--vien);
+      padding-bottom: 10px;
+    }
+
+    .gift-code-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--vang);
+      font-family: monospace;
+      background: rgba(255, 204, 0, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px dashed var(--vang);
+    }
+
+    .btn-copy {
+      background: var(--vang);
+      color: #000;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 13px;
+    }
+    .btn-copy:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .gift-items-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--chu);
+      margin-bottom: 8px;
+    }
+
+    .gift-item-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .gift-item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--vien);
+    }
+
+    .gift-item-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      flex: none;
+      background: rgba(0,0,0,0.2);
+      border-radius: 6px;
+      padding: 2px;
+    }
+
+    .gift-item-info {
+      flex: 1;
+      font-size: 13.5px;
+      color: var(--chu-mo);
+      line-height: 1.4;
+    }
+    .gift-item-info strong {
+      color: var(--chu);
+    }
+
+    .search-box-container {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .search-box-container input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--vien);
+      background: var(--the-nen);
+      color: var(--chu);
+      font-size: 15px;
+    }
+    .search-box-container input:focus {
+      outline: none;
+      border-color: var(--vang);
+    }
+
+    .toast-copy {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 2000;
+      animation: fadeInOut 0.3s ease;
+    }
+    @keyframes fadeInOut {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+
+      <div class="hero-banner" style="padding:34px 20px;">
+        <h2><i class="fa-solid fa-gift"></i> HỆ THỐNG GIFTCODE</h2>
+        <p>Tổng hợp mã quà tặng sự kiện và tân thủ. Nhập mã tại NPC Santa trong game.</p>
+      </div>
+
+      <div class="search-box-container" style="margin-top: 20px;">
+        <input type="text" id="searchCode" placeholder="Tìm kiếm giftcode hoặc vật phẩm..." onkeyup="filterCodes()">
+      </div>
+
+      <section class="news-section" style="margin-top:10px;">
+        <div class="news-head">
+          <h2>Danh Sách Giftcode Khai Mở</h2>
+        </div>
+
+        <div class="gift-grid" id="giftGrid">
+
+          <!-- Code 1 -->
+          <div class="gift-card" data-keywords="nromai thoi vang hong ngoc">
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-nromai">nromai</span>
+              <button class="btn-copy" onclick="copyCode('nromai')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div>
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="images/items/thoi_vang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x35</strong> Thỏi vàng</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/hong_ngoc.png" alt="Hồng ngọc" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x50</strong> Hồng ngọc</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Code 2 -->
+          <div class="gift-card" data-keywords="duatop ngoc rong sao pha le da nang cap">
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-duatop">duatop</span>
+              <button class="btn-copy" onclick="copyCode('duatop')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div>
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="images/items/ngoc_rong_3s.png" alt="Ngọc rồng 3s" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Bộ ngọc rồng 3 sao</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/sao_pha_le.png" alt="Sao pha lê" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x99</strong> Sao pha lê</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/item_cap_1.png" alt="Item cấp 1" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x10</strong> Item cấp 1</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/da_nang_cap.png" alt="Đá nâng cấp" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x99</strong> Đá nâng cấp mỗi loại</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Code 3 -->
+          <div class="gift-card" data-keywords="tanthu cai trang dai thien gioi canh thien than ac quy">
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-tanthu">tanthu</span>
+              <button class="btn-copy" onclick="copyCode('tanthu')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div>
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="images/items/ct_dai_thien_gioi.png" alt="Cải trang Đại Thiên Giới" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>1x</strong> Cải trang Đại Thiên Giới 3D (24% SD, 23% HP KI, 20% TNSM, đẹp tăng 5% SD, không ảnh hưởng cái lạnh, không giao dịch)</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/canh_thien_than.png" alt="Cánh thiên thần ác quỷ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>1x</strong> Cánh thiên thần ác quỷ (7% SD, HP, KI 3D, không giao dịch)</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Code 4 -->
+          <div class="gift-card" data-keywords="vatpham banh duoi khi diem dau hop hit">
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-vatpham">vatpham</span>
+              <button class="btn-copy" onclick="copyCode('vatpham')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div>
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="images/items/banh.png" alt="Bánh" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Bánh mỗi loại</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/duoi_khi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Đuôi khỉ</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/diem.png" alt="Diêm" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Diêm</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/dau.png" alt="Dầu" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Dầu</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/hop_hit.png" alt="Hộp hit" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>1x</strong> Hộp quà Hit</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Code 5 -->
+          <div class="gift-card" data-keywords="vietnamvodich duoi khi banh thoi vang co bon la">
+            <div class="gift-top">
+              <span class="gift-code-text" id="code-vietnamvodich">vietnamvodich</span>
+              <button class="btn-copy" onclick="copyCode('vietnamvodich')"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div>
+              <div class="gift-items-title">Phần thưởng bao gồm:</div>
+              <ul class="gift-item-list">
+                <li class="gift-item-row">
+                  <img src="images/items/duoi_khi.png" alt="Đuôi khỉ" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Đuôi khỉ</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/banh.png" alt="Bánh" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Bánh mỗi loại</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/thoi_vang.png" alt="Thỏi vàng" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>15x</strong> Thỏi vàng</div>
+                </li>
+                <li class="gift-item-row">
+                  <img src="images/items/co_bon_la.png" alt="Cỏ bốn lá" class="gift-item-img" onerror="this.src='https://via.placeholder.com/32'">
+                  <div class="gift-item-info"><strong>x5</strong> Cỏ bốn lá</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="toast-copy" id="toastCopy">Đã sao chép mã giftcode thành công!</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var khung = document.getElementById("mainApricotContainer");
+      if (!khung) return;
+      for (var i = 0; i < 18; i++) {
+        var hoa = document.createElement("div");
+        hoa.className = "apricot-flower";
+        hoa.style.left = Math.random() * 100 + "vw";
+        hoa.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        hoa.style.animationDelay = (Math.random() * 5) + "s";
+        hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
+        khung.appendChild(hoa);
+      }
+    });
+
+    function copyCode(codeId) {
+      let codeText = document.getElementById('code-' + codeId).innerText;
+      navigator.clipboard.writeText(codeText).then(function() {
+        let toast = document.getElementById('toastCopy');
+        toast.style.display = 'block';
+        setTimeout(function() {
+          toast.style.display = 'none';
+        }, 2000);
+      });
+    }
+
+    function filterCodes() {
+      let input = document.getElementById('searchCode').value.toLowerCase().trim();
+      let cards = document.querySelectorAll('#giftGrid .gift-card');
+
+      cards.forEach(card => {
+        let keywords = card.getAttribute('data-keywords') || '';
+        let textContent = card.innerText.toLowerCase();
+        
+        if (input === "" || keywords.includes(input) || textContent.includes(input)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+  </script>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
