@@ -1,6 +1,6 @@
 
 window.API_BASE_URL = window.API_BASE_URL
-  || "https://ngocrong-backend.vercel.app/api";
+|| "https://api.nrohoamai.online/api";
 async function apiCall(endpoint, method = 'GET', data = null) {
   try {
     const config = {
