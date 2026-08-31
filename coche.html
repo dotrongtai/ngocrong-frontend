@@ -92,6 +92,29 @@
       margin-top: 16px;
     }
 
+    /* Style cho danh sách Boss Đồ Thần Linh */
+    .boss-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .boss-badge {
+      background: rgba(255, 204, 0, 0.12);
+      border: 1px solid rgba(255, 204, 0, 0.4);
+      color: var(--vang);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: 0.2s;
+    }
+    .boss-badge:hover {
+      background: rgba(255, 204, 0, 0.25);
+      transform: translateY(-2px);
+    }
+
     /* Bảng nhiệm vụ KOL trong modal */
     .table-responsive {
       width: 100%;
@@ -238,7 +261,7 @@
 
       <!-- Thanh tìm kiếm cơ chế nhanh -->
       <div class="search-box-container" style="margin-top: 20px;">
-        <input type="text" id="searchMechanism" placeholder="Tìm kiếm cơ chế (ví dụ: ngọc xanh, dùi đục, đá hemita, vàng, hồng ngọc, skh, giftcode, kol...)" onkeyup="filterMechanisms()">
+        <input type="text" id="searchMechanism" placeholder="Tìm kiếm cơ chế (ví dụ: ngọc xanh, đồ thần linh, boss, cooler, cumber...)" onkeyup="filterMechanisms()">
       </div>
 
       <section class="news-section" style="margin-top:10px;">
@@ -273,6 +296,22 @@
               <button class="btn-secondary" onclick="openModal('skhModal')" style="cursor:pointer; border:none; padding:8px 16px; border-radius:8px;">
                 <i class="fa-solid fa-eye"></i> Xem chi tiết
               </button>
+            </div>
+          </div>
+
+          <!-- Đồ Thần Linh -->
+          <div class="cc-card" data-keywords="do than linh cooler baby sieu bo hung boss dia nguc 12h cumber">
+            <div class="cc-top">
+              <div class="cc-icon">✨</div>
+              <h3>Đồ Thần Linh</h3>
+            </div>
+            <p>Người chơi có thể farm quái tại <strong>Cooler</strong> hoặc săn các boss khủng để thu thập trang bị thần linh giá trị:</p>
+            <div class="boss-badges">
+              <span class="boss-badge"><i class="fa-solid fa-skull"></i> Baby</span>
+              <span class="boss-badge"><i class="fa-solid fa-skull"></i> Cooler</span>
+              <span class="boss-badge"><i class="fa-solid fa-skull"></i> Siêu Bọ Hung</span>
+              <span class="boss-badge"><i class="fa-solid fa-skull"></i> Boss Địa Ngục 12h</span>
+              <span class="boss-badge"><i class="fa-solid fa-skull"></i> Cumber</span>
             </div>
           </div>
 
@@ -335,21 +374,7 @@
             </div>
             <p>Săn <strong>Boss Mặt Trời</strong> xuất hiện ngẫu nhiên tại các làng và map thường để sở hữu Dùi đục và Đá Hemitia.</p>
           </div>
-          <div class="cc-card" data-tu="đồ thần linh do than linh mon than linh thần linh baby black goku siêu bọ hung sieu bo hung cooler boss địa ngục 12h dia nguc cumber săn boss trang bị">
-            <div class="cc-top">
-              <div class="cc-icon">⚔️</div>
-              <h3>Đồ thần linh</h3>
-            </div>
-            <p>Săn các boss dưới đây để nhận đồ thần linh.</p>
-            <div class="boss-vien" style="margin-top:12px;">
-              <span>Baby</span>
-              <span>Black Goku</span>
-              <span>Siêu Bọ Hung</span>
-              <span>Cooler</span>
-              <span>Boss địa ngục 12h</span>
-              <span>Cumber</span>
-            </div>
-          </div>
+
           <!-- Đệ tử -->
           <div class="cc-card" data-keywords="de tu broly super broly mabu">
             <div class="cc-top">
@@ -375,6 +400,7 @@
               <li><strong>Top nhiệm vụ</strong></li>
             </ul>
           </div>
+
         </div>
       </section>
 
@@ -563,7 +589,6 @@
 
     // Hàm nhận diện chế độ Light/Dark của trang để tự động đổi màu popup ngược lại
     function updatePopupTheme() {
-      // Kiểm tra xem thẻ html hoặc body có class hoặc attribute light-mode / dark-mode hay dựa vào localStorage/theme.js
       let isLightMode = document.body.classList.contains('light-mode') || 
                         document.documentElement.classList.contains('light-mode') ||
                         localStorage.getItem('theme') === 'light';
