@@ -1,6 +1,6 @@
 const PRIZES = [
-  { id: 457, quantity: 5, name: "Thỏi vàng", icon: "assets/images/prizes/thoivang.png" },
-  { id: 16, quantity: 2, name: "Ngọc Rồng 3 sao", icon: "assets/images/prizes/3sao.png" },
+  { id: 457, quantity: 3, name: "Thỏi vàng", icon: "assets/images/prizes/thoivang.png" },
+  { id: 17, quantity: 2, name: "Ngọc Rồng 4 sao", icon: "assets/images/prizes/3sao.png" },
   { id: 1144, quantity: 1, name: "Phượng hoàng lửa", icon: "assets/images/prizes/phuonghoanglua.png" },
   {
     id: null,
@@ -22,4 +22,4 @@ const PRIZES = [
   { id: 1567, quantity: 1, name: "Cải trang Frieren", icon: "assets/images/prizes/Frieren.png" }
 ];
 const SECTOR_COLORS = ["#3a1d63", "#5a2e8c"];
-const SPIN_COSTS_FALLBACK = [5, 30, 70, 100, 150, 250, 450, 600, 750, 1000];
+const SPIN_COSTS_FALLBACK = [70, 80, 90, 100, 150, 250, 450, 600, 750, 1000];
