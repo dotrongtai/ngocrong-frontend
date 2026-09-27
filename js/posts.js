@@ -30,7 +30,7 @@ const BAI_DANG = [
     tomTat: "Nhận ngay hàng loạt mã quà tặng giá trị khủng như nromai, duatop, tanthu, vatpham và vietnamvodich tại NPC Santa.",
     tag: "Giftcode",
     tagClass: "tag-tin",
-    ngay: "2026-08-31",
+    ngay: "2026-09-28",
     ghim: true,
     lien: "giftcode.html",
     noi: `

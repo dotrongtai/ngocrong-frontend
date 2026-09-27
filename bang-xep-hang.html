@@ -92,7 +92,6 @@
     .bxh.b-sucmanh .c-so   { width: 18%; }
     .bxh.b-sucmanh .c-tong { width: 21%; }
     .bxh.b-nhiemvu .c-so   { width: 20%; }
-    .bxh.b-nap     .c-so   { width: 28%; }
 
     .bxh .ten {
       font-weight: 800;
@@ -197,9 +196,6 @@
         <button class="tab-nut" data-loai="nhiemvu">
           <i class="fa-solid fa-scroll"></i> Top Nhiệm Vụ
         </button>
-        <button class="tab-nut" data-loai="nap">
-          <i class="fa-solid fa-gem"></i> Top Nạp
-        </button>
       </div>
 
       <div class="khung-bang">
@@ -292,24 +288,6 @@
       return html + '</tbody></table>';
     }
 
-    function veNap(ds) {
-      var html = '<table class="bxh b-nap"><thead><tr>'
-        + '<th class="c-hang">Hạng</th>'
-        + '<th class="c-ht">Hành tinh</th>'
-        + '<th class="c-ten">Người chơi</th>'
-        + '<th class="c-so">Tổng nạp</th>'
-        + '</tr></thead><tbody>';
-      ds.forEach(function (x, i) {
-        html += '<tr>'
-          + '<td class="c-hang">' + huyHieu(i + 1) + '</td>'
-          + '<td class="c-ht">' + oHanhTinh(x.gender) + '</td>'
-          + '<td class="c-ten ten">' + thoat(x.name) + '</td>'
-          + '<td class="c-so tong">' + soVn(x.tongNap) + 'đ</td>'
-          + '</tr>';
-      });
-      return html + '</tbody></table>';
-    }
-
     function ve(loai, ds) {
       var khung = document.getElementById('noiDungBang');
       if (!ds || ds.length === 0) {
@@ -317,8 +295,7 @@
         return;
       }
       if (loai === 'sucmanh') khung.innerHTML = veSucManh(ds);
-      else if (loai === 'nhiemvu') khung.innerHTML = veNhiemVu(ds);
-      else khung.innerHTML = veNap(ds);
+      else khung.innerHTML = veNhiemVu(ds);
     }
 
     async function tai(loai) {
