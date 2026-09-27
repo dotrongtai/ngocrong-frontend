@@ -1,5 +1,29 @@
 const BAI_DANG = [
   {
+    id: "su-kien-20-10-mua-2",
+    icon: "💐",
+    tieuDe: "Sự Kiện 20/10 — Ngày Phụ Nữ Việt Nam (Mùa 2)",
+    tomTat: "Thu thập hoa, chế tạo bó hoa tặng cây tăng cấp, diệt sâu bảo vệ điểm và săn 6 Boss nhận phần thưởng Top hấp dẫn!",
+    tag: "Sự kiện",
+    tagClass: "",
+    ngay: "2026-09-28",
+    ghim: true,
+    lien: "20_10.html",
+    noi: `
+      <p>Vào hồi <strong>21h ngày 28/09</strong>, <strong>Ngọc Rồng Hoa Mai</strong> chính thức khai mở <strong>Sự Kiện 20/10 — Mùa 2</strong> kéo dài đến <strong>23h00 ngày 23/10</strong>.</p>
+      
+      <p><strong>Cơ chế trồng cây:</strong> Thu thập Hoa Hồng, Hoa Đỏ và các nguyên liệu để chế tạo các loại Bó Hoa. Tặng hoa và bón phân giúp cây tăng điểm và thăng cấp (tối đa 5 cấp).</p>
+      
+      <p><strong>Hoạt động diệt sâu:</strong> Hàng ngày cây sẽ xuất hiện sâu. Nếu không diệt sâu trong 1 tiếng, toàn server sẽ bị <strong>chia đôi số điểm</strong> và cây bị tụt cấp!</p>
+      
+      <p><strong>Săn Boss sự kiện:</strong> Sự kiện xuất hiện tổng cộng 6 Boss. Đặc biệt khi cây đạt cấp 5, vào 20h tối toàn bộ 6 Boss sẽ đồng loạt xuất hiện tại 3 Làng.</p>
+
+      <p><strong>Đua Top nhận quà khủng:</strong> Top 1 nhận Cánh Nữ Thần vĩnh viễn, Danh hiệu vĩnh viễn, 500 thỏi vàng, 1000 hồng ngọc và Set kích hoạt tự chọn.</p>
+      
+      <p>Hãy truy cập trang sự kiện chi tiết để xem đầy đủ công thức và lịch trình săn Boss nhé!</p>
+    `
+  },
+  {
     id: "giftcode-khai-mo",
     icon: "🎁",
     tieuDe: "Tổng Hợp Giftcode Khai Mở Server & Tân Thủ",
@@ -27,7 +51,7 @@ const BAI_DANG = [
     tag: "Sự kiện",
     tagClass: "",
     ngay: "2026-08-30",
-    ghim: true,
+    ghim: false,
     lien: "dua-top.html",
     noi: `
       <p>Máy chủ khai mở lúc <strong>20:30 ngày 31/08</strong>. Ngay từ giờ đó, ba bảng
@@ -35,7 +59,7 @@ const BAI_DANG = [
       <p><strong>Đua top sức mạnh</strong> — xếp theo tổng sức mạnh nhân vật lúc chốt.</p>
       <p><strong>Đua top nạp</strong> — xếp theo tổng tiền nạp tích luỹ trong 7 ngày.</p>
       <p><strong>Đua top nhiệm vụ</strong> — xếp theo số nhiệm vụ hoàn thành.</p>
-      <p>Cư dân hãy thật chăm chỉ cày cuốc và tham gia sự kiện Trung Thu cùng đội ngũ Admin nhé.</p>
+      <p>Cư dân hãy thật chăm chỉ cày cuốc và tham gia các sự kiện cùng đội ngũ Admin nhé.</p>
     `
   },
   {
@@ -64,28 +88,7 @@ const BAI_DANG = [
 
       <p><strong>Nội dung nhóm.</strong> Ngọc Rồng Sao Đen và hệ thống bang hội đều đã mở.</p>
 
-      <p><strong>Sự kiện Trung Thu</strong> đang diễn ra — đốt lồng đèn hoa đăng và săn Khỉ Đột.</p>
-    `
-  },
-  {
-    id: "trung-thu-2026",
-    icon: "🏮",
-    tieuDe: "Sự Kiện Trung Thu — Đốt Lồng Đèn & Săn Khỉ Đột",
-    tomTat: "Gom Diêm và Dầu thắp đèn hoa đăng nhận quà, dùng Mặt trăng gọi Khỉ Đột lấy Đuôi khỉ x2 kinh nghiệm.",
-    tag: "Sự kiện",
-    tagClass: "",
-    ngay: "2026-08-27",
-    ghim: false,
-    lien: "trungthu.html",
-    noi: `
-      <p>Rằm tháng Tám đã về với <strong>Ngọc Rồng Hoa Mai</strong>. Mùa này có hai việc đáng làm.</p>
-      <p><strong>Đốt lồng đèn hoa đăng.</strong> Săn boss để nhặt Diêm, đánh quái để nhặt Dầu.
-      Ăn Bưởi trước khi farm thì dầu ra nhiều hơn hẳn. Có đủ hai thứ thì về làng thắp đèn,
-      mỗi ngọn đèn là một phần quà ngẫu nhiên.</p>
-      <p><strong>Săn Khỉ Đột.</strong> Thắp đèn có lúc rơi ra Mặt trăng. Dùng nó ở map thường là
-      Khỉ Đột hiện ra ngay chỗ bạn đứng. Hạ được thì có Đuôi khỉ, dùng vào là x2 kinh nghiệm
-      trong 30 phút.</p>
-      <p>Thi thoảng trăng hoá đỏ — đó là lúc <strong>Khỉ Đột Vương</strong> xuống núi.</p>
+      <p><strong>Sự kiện 20/10</strong> đang diễn ra — thu thập hoa, diệt sâu và săn Boss sự kiện.</p>
     `
   }
 ];
@@ -179,7 +182,7 @@ function moBaiDang(id) {
     '<i class="fa-regular fa-calendar"></i> ' + dinhDangNgay(b.ngay);
   document.getElementById("postModalBody").innerHTML = b.noi || "";
   document.getElementById("postModalActions").innerHTML = b.lien
-    ? '<a href="' + b.lien + '" class="btn-secondary" style="text-decoration:none; display:inline-block;">Xem chi tiết</a>'
+    ? '<a href="' + b.lien + '" class="btn-secondary" style="text-decoration:none; display:inline-block;">Xem chi tiết trang sự kiện</a>'
     : "";
 
   hop.style.display = "flex";

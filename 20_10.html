@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sự Kiện 20/10 Ngày Phụ Nữ Việt Nam (Mùa 2) - Ngọc Rồng Hoa Mai</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <style>
+    /* CSS Tùy chỉnh riêng cho trang sự kiện 20/10 */
+    .event-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+      border: 1px solid #ffe3ec;
+    }
+
+    .event-header {
+      background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 50%, #ff8fa3 100%);
+      color: #ffffff;
+      padding: 40px 25px;
+      text-align: center;
+      position: relative;
+    }
+
+    .event-header h1 {
+      font-size: 2rem;
+      margin: 10px 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .event-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(5px);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .event-body {
+      padding: 30px 25px;
+      color: #333333;
+      line-height: 1.7;
+    }
+
+    .section-box {
+      background: #fff0f5;
+      border-left: 5px solid #ff4d6d;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      color: #c9184a;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #ffccd5;
+      padding-bottom: 8px;
+    }
+
+    .grid-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .item-card {
+      background: #ffffff;
+      border: 1px solid #ffccd5;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Khung chứa ảnh vật phẩm */
+    .item-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffe5ec;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .item-icon img, .item-img-inline {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      vertical-align: middle;
+    }
+
+    .recipe-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .recipe-list li {
+      padding: 12px 0;
+      border-bottom: 1px dashed #ffccd5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .recipe-list li:last-child {
+      border-bottom: none;
+    }
+
+    .badge-points {
+      background: #ff4d6d;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    /* Bảng Lịch Trình Săn Boss Căn Lề Chuẩn CHỐNG XÔ LỆCH */
+    .boss-schedule-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 15px;
+    }
+
+    .boss-schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #ffccd5;
+    }
+
+    .boss-schedule-table tr {
+      border-bottom: 1px dashed #ffccd5;
+    }
+
+    .boss-schedule-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .boss-schedule-table td {
+      padding: 14px 16px;
+      vertical-align: middle;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .boss-schedule-table .boss-name {
+      width: 38%;
+      min-width: 220px;
+      color: #c9184a;
+      text-align: left;
+    }
+
+    .boss-schedule-table .boss-icon-img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .boss-schedule-table .boss-name small {
+      color: #666;
+      font-weight: normal;
+    }
+
+    .boss-schedule-table .boss-desc {
+      color: #333333;
+      text-align: left;
+    }
+
+    .boss-schedule-table .highlight-time {
+      font-weight: bold;
+      color: #d63384;
+      background: #ffe5ec;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .boss-caps-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 6px;
+    }
+
+    .boss-caps-group img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border: 1px solid #ffe69c;
+      border-radius: 10px;
+      padding: 18px;
+      margin: 20px 0;
+      color: #664d03;
+    }
+
+    .table-top {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid #ffccd5;
+    }
+
+    .table-top th {
+      background: #ff4d6d;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .table-top td {
+      padding: 12px;
+      border-bottom: 1px solid #ffe5ec;
+      background: #fff;
+    }
+
+    .table-top tr:nth-child(even) td {
+      background: #fff0f5;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #ff4d6d;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      color: #c9184a;
+      transform: translateX(-3px);
+    }
+
+    @media (max-width: 650px) {
+      .event-header h1 { font-size: 1.5rem; }
+      .event-body { padding: 15px; }
+      .recipe-list li { flex-direction: row; justify-content: space-between; gap: 5px; }
+      .boss-schedule-table td {
+        display: block;
+        width: 100% !important;
+        padding: 8px 14px;
+      }
+      .boss-schedule-table .boss-name {
+        padding-top: 12px;
+        padding-bottom: 2px;
+      }
+      .boss-schedule-table .boss-desc {
+        padding-bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Khung hiệu ứng hoa rơi -->
+  <div class="apricot-falling-container" id="mainApricotContainer"></div>
+
+  <div class="container">
+    <div id="header-placeholder"></div>
+
+    <div class="main-content">
+      
+      <a href="dien-dan.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Quay lại Diễn Đàn</a>
+
+      <div class="event-container">
+        
+        <!-- Header Bài Viết -->
+        <div class="event-header">
+          <span class="event-badge"><i class="fa-solid fa-star"></i> SỰ KIỆN MÙA 2</span>
+          <h1>SỰ KIỆN 20/10: NGÀY PHỤ NỮ VIỆT NAM</h1>
+          <p><i class="fa-solid fa-clock"></i> Khai mở: 21h00 ngày 28/09 &bull; Kết thúc: 23h00 ngày 23/10</p>
+        </div>
+
+        <div class="event-body">
+
+          <!-- Giới thiệu chung -->
+          <div class="section-box">
+            <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> Thông Báo Chung</h2>
+            <p>Xin chào toàn thể cư dân <strong>Ngọc Rồng Hoa Mai</strong>!</p>
+            <p>Vào lúc <strong>21h00 ngày 28/09</strong>, Server chính thức kích hoạt chuỗi <strong>Sự Kiện 20/10 (Mùa 2)</strong> với nhiều hoạt động thu thập, trồng cây thăng cấp và chuỗi săn Boss liên server nhận quà khủng. Hãy chuẩn bị hành trang đua Top ngay hôm nay!</p>
+          </div>
+
+          <!-- Cơ chế sự kiện -->
+          <h2 class="section-title"><i class="fa-solid fa-seedling"></i> Cơ Chế Trồng Cây</h2>
+          <p>Thu thập các vật phẩm sự kiện và nguyên liệu để chế tạo các loại bó hoa. Tặng hoa và bón phân cho cây để tích lũy điểm thăng cấp.</p>
+          <div class="grid-items">
+            <div class="item-card">
+              <div class="item-icon">🌳</div>
+              <div>
+                <strong>Cây Sự Kiện</strong>
+                <div style="font-size:0.85rem; color:#666;">Có 5 Cấp độ, điểm yêu cầu sẽ tăng dần theo từng cấp cây.</div>
+              </div>
+            </div>
+            <div class="item-card">
+              <div class="item-icon">💧</div>
+              <div>
+                <strong>Tăng Cấp Cây</strong>
+                <div style="font-size:0.85rem; color:#666;">Mỗi cấp cây tăng thêm sẽ mở khóa thêm Boss sự kiện mới.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thu thập nguyên liệu -->
+          <h2 class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-basket-shopping"></i> Thu Nhập Nguyên Liệu</h2>
+          <div class="grid-items">
+            <div class="item-card">
+              <div class="item-icon"><img src="assets/images/prizes/hoahong.png" alt="Hoa Hồng"></div>
+              <div><strong>Hoa Hồng:</strong> Rơi khi đánh quái thường trên các map.</div>
+            </div>
+            <div class="item-card">
+              <div class="item-icon"><img src="assets/images/prizes/hoado.png" alt="Hoa Đỏ"></div>
+              <div><strong>Hoa Đỏ:</strong> Rơi khi săn Boss TDST và Boss Sự kiện.</div>
+            </div>
+            <div class="item-card">
+              <div class="item-icon"><img src="assets/images/prizes/phanbonthuong.png" alt="Phân Bón Thường"></div>
+              <div><strong>Phân Bón Thường / Cao Cấp:</strong> Săn Boss sự kiện hoặc Mua tại Cửa hàng.</div>
+            </div>
+            <div class="item-card">
+              <div class="item-icon"><img src="assets/images/prizes/thuoctrusau.png" alt="Thuốc Trừ Sâu"></div>
+              <div><strong>Thuốc Trừ Sâu:</strong> Săn Boss sự kiện hoặc Mua tại Cửa hàng.</div>
+            </div>
+            <div class="item-card">
+              <div class="item-icon">🎗️</div>
+              <div><strong>Ruy Băng / Giấy Màu:</strong> Mua trực tiếp tại Cửa hàng.</div>
+            </div>
+          </div>
+          <p style="font-size:0.88rem; color:#888; font-style:italic;">🚨 <u>Lưu ý:</u> Tỷ lệ rơi hoa sẽ tăng dần khi tham gia đánh ở các map cao hơn và săn Boss cấp cao hơn.</p>
+
+          <!-- Điểm Số Vật Phẩm (Đã bỏ số lượng) -->
+          <h2 class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-star"></i> Điểm Số Vật Phẩm</h2>
+          <ul class="recipe-list">
+            <li>
+              <span><img src="assets/images/prizes/bohoathuong.png" alt="Bó hoa thường" class="item-img-inline"> <strong>Bó hoa thường</strong></span>
+              <span class="badge-points">+1 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/hoado.png" alt="Hoa Đỏ" class="item-img-inline"> <strong>Hoa đỏ đơn</strong></span>
+              <span class="badge-points">+3 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/bohoathuong.png" alt="Bó hoa hồng" class="item-img-inline"> <strong>Bó hoa hồng</strong></span>
+              <span class="badge-points">+15 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/bohoado.png" alt="Bó hoa đỏ" class="item-img-inline"> <strong>Bó hoa đỏ</strong></span>
+              <span class="badge-points">+45 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/bohoanuthan.png" alt="Bó hoa nữ thần" class="item-img-inline"> <strong>Bó hoa nữ thần</strong></span>
+              <span class="badge-points">+200 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/phanbonthuong.png" alt="Phân bón thường" class="item-img-inline"> <strong>Phân bón thường</strong></span>
+              <span class="badge-points">+20 ~ 60 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/phanboncaocap.png" alt="Phân bón cao cấp" class="item-img-inline"> <strong>Phân bón cao cấp</strong></span>
+              <span class="badge-points">+35 ~ 125 Điểm</span>
+            </li>
+            <li>
+              <span><img src="assets/images/prizes/thuoctrusau.png" alt="Thuốc trừ sâu" class="item-img-inline"> <strong>Thuốc trừ sâu</strong></span>
+              <span class="badge-points">Tối đa +30 Điểm</span>
+            </li>
+          </ul>
+
+          <!-- Lịch trình săn Boss dạng Bảng chuẩn căn lề dùng hình ảnh -->
+          <h2 class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-dragon"></i> Lịch Trình Săn Boss Sự Kiện</h2>
+          <div class="boss-schedule-wrapper">
+            <table class="boss-schedule-table">
+              <tbody>
+                <tr>
+                  <td class="boss-name">
+                    <img src="assets/images/prizes/bunmarider.png" alt="Boss Bulma Rider" class="boss-icon-img">
+                    <strong>Boss Bulma Rider <small></small></strong>
+                  </td>
+                  <td class="boss-desc">
+                    Xuất hiện cố định lúc <span class="highlight-time">12h00</span> và <span class="highlight-time">21h00</span> hằng ngày.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="boss-name">
+                    <div class="boss-caps-group">
+                      <img src="assets/images/prizes/cap1.png" alt="Cấp 1">
+                      <img src="assets/images/prizes/cap2.png" alt="Cấp 2">
+                      <img src="assets/images/prizes/cap3.png" alt="Cấp 3">
+                      <img src="assets/images/prizes/cap4.png" alt="Cấp 4">
+                    </div>
+                    <strong>Boss khung giờ</strong>
+                  </td>
+                  <td class="boss-desc">
+                    Mỗi khi cây tăng thêm 1 Cấp, sẽ xuất hiện thêm 1 Boss mới vào khung giờ <span class="highlight-time">17h00</span> và <span class="highlight-time">22h00</span>. <em>(Tối đa 6 Boss)</em>.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="boss-name">
+                    <img src="assets/images/prizes/cap5.png" alt="Cấp 5" class="boss-icon-img">
+                    <strong>Cây hoa hồng cổ thụ</strong>
+                  </td>
+                  <td class="boss-desc">
+                    Khi cây đạt <strong>Cấp 5</strong>, vào <span class="highlight-time">20h00</span> tối toàn bộ 6 Boss sẽ đồng thời xuất hiện tại 1 khu vực thuộc 3 Làng!
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Cảnh báo sâu bệnh -->
+          <div class="warning-box">
+            <h3 style="margin-top:0; color:#856404;"><i class="fa-solid fa-triangle-exclamation"></i> LƯU Ý ĐẶC BIỆT VỀ SÂU BỆNH!</h3>
+            <p style="margin-bottom:0;">Vào các khung giờ ngẫu nhiên trong ngày, cây sẽ xuất hiện sâu. Trong vòng <strong>1 tiếng</strong> kể từ khi xuất hiện, nếu không có ai dùng <img src="assets/images/prizes/thuoctrusau.png" alt="Thuốc trừ sâu" class="item-img-inline"> <strong>Thuốc Trừ Sâu</strong> diệt sâu thì <strong>TOÀN SERVER SẼ BỊ CHIA ĐÔI ĐIỂM SỐ</strong> đang có. Điểm cây bị trừ về 0 sẽ làm <strong>TỤT CẤP CÂY</strong>. Cư dân hãy chú ý thông báo hệ thống để đi diệt sâu kịp thời!</p>
+          </div>
+
+          <!-- Bảng phần thưởng Top -->
+          <h2 class="section-title" style="margin-top: 25px;"><i class="fa-solid fa-trophy"></i> Phần Thưởng TOP Trồng Cây</h2>
+          <table class="table-top">
+            <thead>
+              <tr>
+                <th>Thứ hạng</th>
+                <th>Phần thưởng sự kiện</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>TOP 1 🥇</strong></td>
+                <td>Cánh Nữ Thần (Vĩnh viễn) + Danh hiệu Top 1 (Vĩnh viễn) + 500 Thỏi vàng + 1.000 Hồng ngọc + Set kích hoạt tự chọn theo hành tinh</td>
+              </tr>
+              <tr>
+                <td><strong>TOP 2 🥈</strong></td>
+                <td>Cánh Nữ Thần (HSD 30 ngày) + Danh hiệu Top 2 + 300 Thỏi vàng + 500 Hồng ngọc + 2 Món Set kích hoạt tự chọn</td>
+              </tr>
+              <tr>
+                <td><strong>TOP 3 🥉</strong></td>
+                <td>Cánh Tiểu Yêu (HSD 15 ngày) + Danh hiệu Top 3 + 100 Thỏi vàng + 300 Hồng ngọc + 3 Món Set kích hoạt Ngẫu nhiên</td>
+              </tr>
+              <tr>
+                <td><strong>TOP 4 - 10 🎖️</strong></td>
+                <td>50 Thỏi vàng + 100 Hồng ngọc</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="text-align: center; margin-top: 30px; font-weight: bold; color: #ff4d6d; font-size: 1.1rem;">
+            🎁 CHÚC TOÀN THỂ CƯ DÂN THAM GIA ĐUA TOP VUI VẺ VÀ ĐẠT NHIỀU PHẦN QUÀ HẤP DẪN! 🎁
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/posts.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      taoHoaMai("mainApricotContainer");
+    });
+
+    function taoHoaMai(id) {
+      var khung = document.getElementById(id);
+      if (!khung) return;
+      for (var i = 0; i < 18; i++) {
+        var hoa = document.createElement("div");
+        hoa.className = "apricot-flower";
+        hoa.style.left = Math.random() * 100 + "vw";
+        hoa.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        hoa.style.animationDelay = (Math.random() * 5) + "s";
+        hoa.style.transform = "scale(" + (Math.random() * 0.6 + 0.6) + ")";
+        khung.appendChild(hoa);
+      }
+    }
+  </script>
+</body>
+</html>
